@@ -1,0 +1,780 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#4F46E5">
+<title>Engineer Me</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EEF2FF; --ink:#1E1B4B; --muted:#475569; --card:#fff; --line:#C7D2FE;
+  --pri:#4F46E5; --pri-d:#3730A3; --acc:#C2410C; --acc-d:#7C2D12;
+  --ok:#15803D; --bad:#B91C1C; --gold:#F59E0B; --role:#4F46E5; --role-d:#3730A3;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:500 17px/1.5 "Baloo 2",ui-rounded,"SF Pro Rounded","Segoe UI",system-ui,sans-serif;
+  background-image:radial-gradient(circle at 12% 8%,#E0E7FF 0 120px,transparent 121px),radial-gradient(circle at 92% 30%,#FDE7D8 0 90px,transparent 91px),radial-gradient(circle at 8% 88%,#DDF3E4 0 110px,transparent 111px);
+  background-attachment:fixed;min-height:100vh;min-height:100dvh}
+.wrap{max-width:980px;margin:0 auto;padding:12px max(16px,env(safe-area-inset-right)) calc(28px + env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}
+@media(min-width:720px){body{font-size:19px}.wrap{padding-top:20px}}
+h1,h2,h3{font-weight:800;line-height:1.15;margin:0 0 8px}
+h1{font-size:clamp(1.9rem,6vw,2.9rem)} h2{font-size:clamp(1.45rem,4.5vw,2rem)} h3{font-size:1.1rem}
+h1:focus,h2:focus{outline:none}
+p{margin:0 0 12px}
+button{font:inherit;color:inherit;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+button:focus-visible,input:focus-visible{outline:4px solid #F59E0B;outline-offset:3px}
+svg{display:block}
+.ico{width:1.5em;height:1.5em;flex:none;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+
+.top{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.back{width:48px;height:48px;border-radius:16px;border:0;background:#fff;color:var(--pri-d);box-shadow:0 4px 0 var(--line);display:grid;place-items:center;cursor:pointer}
+.back:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.steps{flex:1;display:flex;gap:6px;list-style:none;margin:0;padding:0}
+.steps li{flex:1;height:10px;border-radius:9px;background:#fff;box-shadow:inset 0 0 0 2px var(--line)}
+.steps li.on{background:var(--pri);box-shadow:none}
+.brand{font-weight:800;color:var(--pri-d);font-size:.95rem;white-space:nowrap}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:800;font-size:1.15rem;min-height:54px;padding:10px 24px;border:0;border-radius:18px;background:var(--acc);color:#fff;box-shadow:0 5px 0 var(--acc-d),0 12px 20px rgba(30,27,75,.16);cursor:pointer;transition:transform .12s ease-out,box-shadow .12s ease-out}
+.btn:active{transform:translateY(4px);box-shadow:0 1px 0 var(--acc-d)}
+.btn[disabled]{background:#CBD5E1;color:#334155;box-shadow:0 5px 0 #94A3B8;cursor:not-allowed}
+.btn.sec{background:#fff;color:var(--pri-d);box-shadow:0 5px 0 var(--line),0 12px 20px rgba(30,27,75,.08)}
+.btn.sec:active{box-shadow:0 1px 0 var(--line)}
+.btn.role{background:var(--role);box-shadow:0 5px 0 var(--role-d),0 12px 20px rgba(30,27,75,.16)}
+.btn[disabled],.btn.role[disabled]{background:#CBD5E1;color:#334155;box-shadow:0 5px 0 #94A3B8;cursor:not-allowed}
+.btn.big{font-size:1.4rem;min-height:64px;padding:12px 40px}
+.btn.wide{width:100%}
+.link{background:none;border:0;color:var(--muted);text-decoration:underline;min-height:48px;padding:8px 12px;cursor:pointer;font-weight:700}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.center{text-align:center;justify-content:center}
+.card{background:var(--card);border-radius:24px;padding:18px;box-shadow:0 7px 0 var(--line),0 18px 30px rgba(79,70,229,.12)}
+.muted{color:var(--muted)}
+.pop{animation:pop .35s cubic-bezier(.2,1.4,.4,1) both}
+@keyframes pop{from{transform:scale(.92);opacity:0}to{transform:none;opacity:1}}
+@keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+.shake{animation:shake .35s}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* avatar */
+.avw{border-radius:50%;overflow:hidden;background:#C7D2FE;aspect-ratio:1;box-shadow:0 7px 0 var(--line)}
+.avw svg{width:100%;height:100%}
+
+/* start */
+.hero{text-align:center;padding:4vh 0 0;display:flex;flex-direction:column;align-items:center}
+.trio{display:flex;justify-content:center;margin-bottom:18px}
+.trio .avw{width:min(30vw,150px);border:5px solid #fff;margin:0 -8px}
+.trio .avw:nth-child(2){transform:translateY(-14px);z-index:1;width:min(34vw,170px)}
+.hero p.lead{font-size:1.2rem;max-width:30em}
+.fact{margin-top:26px;background:#fff;border-radius:18px;padding:12px 16px;max-width:30em;font-size:1rem;box-shadow:0 4px 0 var(--line)}
+.fact b{color:var(--pri-d)}
+.tiny{font-size:.85rem;color:var(--muted);margin-top:18px}
+
+/* look */
+.look{display:grid;gap:18px}
+.look .me{display:flex;flex-direction:column;align-items:center;gap:12px}
+.look .me .avw{width:min(52vw,230px)}
+.field{width:100%;max-width:300px}
+.field label{display:block;font-weight:700;margin-bottom:4px}
+.field input{width:100%;font:inherit;font-weight:700;min-height:50px;padding:8px 14px;border-radius:14px;border:3px solid var(--line);background:#fff;color:var(--ink)}
+.grp{margin-bottom:14px}
+.grp h3{margin-bottom:8px}
+.sw{display:flex;flex-wrap:wrap;gap:10px}
+.sw button{width:48px;height:48px;border-radius:50%;border:4px solid #fff;box-shadow:0 0 0 2px var(--line);cursor:pointer;padding:0}
+.sw button[aria-pressed=true]{box-shadow:0 0 0 4px var(--pri)}
+.styles{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.styles button{background:#fff;border:3px solid var(--line);border-radius:18px;padding:6px 4px 4px;cursor:pointer;font-size:.85rem;font-weight:700;line-height:1.2;min-height:48px}
+.styles button .avw{width:78%;margin:0 auto 4px;box-shadow:none}
+.styles button[aria-pressed=true],.tog[aria-pressed=true]{border-color:var(--pri);background:#E0E7FF}
+.tog{background:#fff;border:3px solid var(--line);border-radius:16px;min-height:50px;padding:6px 16px;font-weight:700;cursor:pointer;display:inline-flex;gap:8px;align-items:center}
+@media(min-width:720px){.look{grid-template-columns:280px 1fr;align-items:start}.look .me{position:sticky;top:16px}.look .me .avw{width:230px}}
+
+/* skills */
+.skills{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:14px 0 18px}
+@media(min-width:620px){.skills{grid-template-columns:repeat(3,1fr)}}
+@media(min-width:860px){.skills{grid-template-columns:repeat(4,1fr)}}
+.skill{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;min-height:104px;padding:12px 8px;background:#fff;border:3px solid #fff;border-radius:22px;box-shadow:0 6px 0 var(--line);cursor:pointer;font-weight:700;line-height:1.2;transition:transform .12s ease-out}
+.skill .ico{width:34px;height:34px;color:var(--pri)}
+.skill[aria-pressed=true]{background:var(--pri);border-color:var(--pri);color:#fff;box-shadow:0 6px 0 var(--pri-d);transform:translateY(-3px)}
+.skill[aria-pressed=true] .ico{color:#fff}
+.skill.dim{opacity:.55}
+.bar{position:sticky;bottom:0;margin:0 -16px;padding:12px 16px calc(12px + env(safe-area-inset-bottom));background:linear-gradient(transparent,var(--bg) 30%);display:flex;gap:12px;align-items:center;justify-content:space-between}
+.count{font-weight:800;font-size:1.1rem}
+
+/* role card */
+.rolehead{background:var(--role);color:#fff;border-radius:26px;padding:18px;display:flex;gap:16px;align-items:center;box-shadow:0 7px 0 var(--role-d);margin-bottom:16px}
+.rolehead .avw{width:112px;flex:none;border:4px solid #fff;box-shadow:none}
+.rolehead .kick{font-weight:700;opacity:.95;margin:0}
+.rolehead h2{color:#fff;margin:0 0 4px}
+.rolehead p{margin:0}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px;padding:0;list-style:none}
+.chips li{display:inline-flex;align-items:center;gap:6px;background:#fff;border-radius:99px;padding:6px 14px 6px 10px;font-weight:700;box-shadow:0 3px 0 var(--line)}
+.chips .ico{color:var(--role);width:22px;height:22px}
+.info{display:grid;gap:14px;margin-bottom:18px}
+@media(min-width:720px){.info{grid-template-columns:1fr 1fr}}
+.info .card h3{display:flex;align-items:center;gap:8px;color:var(--role-d)}
+.info .card p:last-child{margin:0}
+.info .green{background:#ECFDF3;box-shadow:0 7px 0 #BBE7CB}
+.info .green h3{color:#166534}
+
+/* challenge */
+.chhead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.chhead h2{margin:0;color:var(--role-d)}
+.stars{display:inline-flex;gap:4px}
+.stars svg{width:30px;height:30px;fill:#fff;stroke:#94A3B8;stroke-width:1.6;stroke-linejoin:round}
+.stars svg.on{fill:var(--gold);stroke:#B45309}
+.stars.xl svg{width:54px;height:54px}
+.brief{background:#fff;border-radius:18px;padding:12px 16px;border-left:8px solid var(--role);margin-bottom:14px}
+.brief b{color:var(--role-d)}
+.msg{min-height:1.6em;font-weight:700;margin:10px 0}
+.msg.good{color:var(--ok)} .msg.bad{color:var(--bad)}
+.stagecols{display:grid;gap:16px}
+@media(min-width:720px){.stagecols{grid-template-columns:minmax(0,420px) 1fr;align-items:start}}
+
+/* bot */
+.botgrid{position:relative;display:grid;grid-template-columns:repeat(5,1fr);gap:0;width:100%;max-width:min(420px,44vh);aspect-ratio:1;background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 7px 0 var(--line);margin:0 auto}
+.botgrid .c{border:1px solid #E0E7FF;display:grid;place-items:center}
+.botgrid .c.wall{background:repeating-linear-gradient(45deg,#FDBA74 0 8px,#FB923C 8px 16px)}
+.botgrid .c.goal svg{width:64%;height:64%;stroke:#B91C1C;stroke-width:3;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.botgrid .c.goal{background:#FEE2E2}
+#bot{position:absolute;left:0;top:0;width:20%;height:20%;padding:2.5%;transition:transform .28s ease-in-out;pointer-events:none}
+#bot svg{width:100%;height:100%}
+.prog{display:flex;flex-wrap:wrap;gap:6px;min-height:52px;background:#fff;border-radius:16px;padding:8px;border:3px dashed var(--line);align-items:center}
+.prog button{width:38px;height:38px;border-radius:10px;border:0;background:var(--role);color:#fff;display:grid;place-items:center;cursor:pointer;padding:0}
+.prog button.cur{background:var(--gold);color:#1E1B4B}
+.prog .ico{width:22px;height:22px;stroke-width:3}
+.pad{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:12px 0}
+.pad button{min-height:58px;border-radius:16px;border:0;background:#fff;color:var(--role-d);box-shadow:0 5px 0 var(--line);display:grid;place-items:center;cursor:pointer}
+.pad button:active{transform:translateY(4px);box-shadow:0 1px 0 var(--line)}
+.pad .ico{width:30px;height:30px;stroke-width:3}
+
+/* wires */
+.wgrid{display:grid;gap:6px;width:100%;margin:0 auto}
+.wgrid .end{aspect-ratio:1}
+.wgrid .end svg{width:100%;height:100%}
+.tile{aspect-ratio:1;border:0;border-radius:14px;background:#fff;box-shadow:0 4px 0 var(--line);padding:0;cursor:pointer;color:#94A3B8;overflow:hidden}
+.tile svg{width:100%;height:100%;transition:transform .16s ease-out;fill:none;stroke:currentColor;stroke-width:18;stroke-linecap:round;stroke-linejoin:round}
+.tile.on{color:#F59E0B;background:#FFFBEB}
+.prop.spin{animation:spin .6s linear infinite;transform-origin:56px 50px}
+
+/* choices (materials, design) */
+.opts{display:grid;gap:10px}
+@media(min-width:620px){.opts.three{grid-template-columns:repeat(3,1fr)}}
+.opt{text-align:left;background:#fff;border:3px solid #fff;border-radius:20px;box-shadow:0 5px 0 var(--line);padding:12px 14px;cursor:pointer;min-height:56px}
+.opt b{display:block;font-size:1.08rem}
+.opt small{color:var(--muted);font-size:.9rem;line-height:1.3;display:block}
+.opt[aria-pressed=true]{border-color:var(--role);background:#F5F3FF}
+.opt.right{border-color:var(--ok);background:#ECFDF3}
+.opt.wrong{border-color:var(--bad);background:#FEF2F2}
+.opt[disabled]{cursor:default}
+.pbar{display:grid;grid-template-columns:5.2em 1fr;align-items:center;gap:8px;font-size:.88rem;font-weight:700;margin-top:4px}
+.pbar i{display:block;height:10px;border-radius:9px;background:#E2E8F0;position:relative;overflow:hidden}
+.pbar i::after{content:"";position:absolute;inset:0;width:var(--v);background:var(--role);border-radius:9px}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.seg .opt{padding:10px;text-align:center}
+.seg .opt small{font-size:.82rem}
+
+/* meters */
+.meter{margin-bottom:10px}
+.mrow{display:flex;justify-content:space-between;gap:8px;font-weight:700}
+.mrow small{color:var(--muted);font-weight:700}
+.mbar{height:16px;background:#E2E8F0;border-radius:10px;position:relative;margin-top:2px}
+.mbar i{position:absolute;inset:0 auto 0 0;border-radius:10px;background:var(--bad);max-width:100%;transition:width .3s ease-out}
+.meter.ok .mbar i{background:var(--ok)}
+.mbar u{position:absolute;top:-4px;bottom:-4px;width:4px;background:var(--ink);border-radius:2px;transform:translateX(-2px)}
+.meter .tag{font-size:.85rem;padding:0 8px;border-radius:9px;background:#FEE2E2;color:var(--bad)}
+.meter.ok .tag{background:#DCFCE7;color:var(--ok)}
+
+/* order + quality */
+.engine{width:100%;max-width:460px;margin:0 auto 12px}
+.engine .z{fill:#fff;stroke:#94A3B8;stroke-width:2;stroke-dasharray:6 5}
+.engine .z.in{fill:var(--role);stroke:var(--role-d);stroke-dasharray:none}
+.engine text{font:800 20px "Baloo 2",sans-serif;fill:#64748B;text-anchor:middle;dominant-baseline:central}
+.engine .z.in + text{fill:#fff}
+.opt.done{opacity:.45}
+.blades{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;max-width:420px;margin:0 auto}
+.blades button{background:#fff;border:3px solid #fff;border-radius:16px;box-shadow:0 4px 0 var(--line);padding:6px;cursor:pointer}
+.blades button.right{border-color:var(--ok);background:#ECFDF3}
+.blades button.wrong{border-color:var(--bad);background:#FEF2F2}
+.blades svg{width:100%}
+
+/* energy */
+.eco{position:sticky;top:6px;z-index:2;padding:12px 14px}
+.eco .meter{margin-bottom:6px}
+.eco .msg{min-height:0;margin:6px 0}
+@media(min-width:720px){.eco{top:16px;padding:18px}}
+.srcs{display:grid;gap:8px}
+.src{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;background:#fff;border-radius:18px;padding:10px 12px;box-shadow:0 4px 0 var(--line)}
+.src b{display:block;line-height:1.2}
+.src small{color:var(--muted);display:block;line-height:1.3;font-size:.86rem}
+.src .nums{font-size:.86rem;font-weight:700;color:var(--role-d)}
+.step{display:flex;align-items:center;gap:6px}
+.step button{width:48px;height:48px;border-radius:14px;border:0;background:var(--role);color:#fff;font-size:1.6rem;font-weight:800;line-height:1;cursor:pointer;box-shadow:0 4px 0 var(--role-d)}
+.step button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--role-d)}
+.step button[disabled]{background:#CBD5E1;box-shadow:0 4px 0 #94A3B8;color:#475569;cursor:not-allowed}
+.step output{min-width:1.6em;text-align:center;font-weight:800;font-size:1.3rem}
+.fanbox{display:grid;place-items:center;background:#fff;border-radius:20px;box-shadow:0 7px 0 var(--line);padding:10px;margin-bottom:14px;aspect-ratio:1.9}
+@media(min-width:720px){.fanbox{aspect-ratio:1.4}}
+.fanbox svg{height:100%;max-width:100%}
+.fan.spin{animation:spin 1.1s linear infinite;transform-origin:0 0}
+
+/* result + explore */
+.result{text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px}
+.result .avw{width:min(48vw,200px);border:6px solid var(--role);box-shadow:0 7px 0 var(--role-d)}
+.badge{background:var(--role);color:#fff;border-radius:99px;padding:4px 18px;font-weight:800;margin-top:-22px;position:relative;box-shadow:0 4px 0 var(--role-d)}
+.roles{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:14px 0}
+@media(min-width:620px){.roles{grid-template-columns:repeat(3,1fr)}}
+.roletile{background:var(--role);color:#fff;border:0;border-radius:22px;padding:16px 10px;box-shadow:0 6px 0 var(--role-d);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;font-weight:800;line-height:1.2;min-height:120px;justify-content:center}
+.roletile .ico{width:38px;height:38px}
+.roletile .stars svg{width:20px;height:20px;stroke:none;fill:rgba(255,255,255,.35)}
+.roletile .stars svg.on{fill:#FDE68A}
+.roletile:active{transform:translateY(4px);box-shadow:0 2px 0 var(--role-d)}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<noscript><p style="padding:20px">This game needs JavaScript switched on.</p></noscript>
+<script>
+'use strict';
+const GAME_NAME = 'Engineer Me';
+const $ = (s, el = document) => el.querySelector(s);
+const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+const app = $('#app');
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const rnd = n => Math.floor(Math.random() * n);
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = rnd(i + 1); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+
+/* ---------- icons ---------- */
+const IC = {
+  bulb:'<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3z"/>',
+  hammer:'<path d="M13.5 4.5l6 6-3 3-6-6zM12 9l-8.5 8.5 3 3L15 12"/>',
+  pencil:'<path d="M4 20l1-4.5L16 4.5l3.5 3.5L8.5 19 4 20zM13.5 7l3.5 3.5"/>',
+  maths:'<path d="M4.5 7.5h6M7.5 4.5v6M14 7.5h6M5 14.5l5 5M10 14.5l-5 5M14 15.5h6M14 19h6"/>',
+  code:'<path d="M8 7l-5 5 5 5M16 7l5 5-5 5M13.5 5l-3 14"/>',
+  cog:'<circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="6.5"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/>',
+  leaf:'<path d="M5 19C5 10 10 5 20 4.5 20 14 15 19.5 6.5 19.5M5 20l8-8.5"/>',
+  team:'<circle cx="8.5" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M2.5 20c0-3.5 2.7-6 6-6s6 2.5 6 6M16 14.5c3-.3 5.5 1.8 5.5 5.5"/>',
+  search:'<circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l6 6"/>',
+  why:'<circle cx="12" cy="12" r="9.5"/><path d="M9.2 9.5a2.9 2.9 0 1 1 4.4 2.5c-1 .6-1.6 1.2-1.6 2.5M12 17.6v.01"/>',
+  talk:'<path d="M4 5h16v11H10.5L6 20v-4H4z"/>',
+  flag:'<path d="M5 21V4M5 4.5h13l-3 4 3 4H5"/>',
+  hex:'<path d="M12 2.5l8.2 4.7v9.6L12 21.5l-8.2-4.7V7.2z"/><circle cx="12" cy="12" r="2.8"/>',
+  bolt:'<path d="M13 2.5L4.5 13.5H11L10 21.5l8.5-11.5H12.5z"/>',
+  arrow:'<path d="M12 20V5M5.5 11.5L12 5l6.5 6.5"/>',
+  back:'<path d="M19 12H5M11.5 5.5L5 12l6.5 6.5"/>',
+  undo:'<path d="M4 9h10a5.5 5.5 0 0 1 0 11H8M4 9l4.5-4.5M4 9l4.5 4.5"/>',
+  play:'<path d="M7 4.5v15l12-7.5z"/>',
+  check:'<path d="M4.5 12.5l5 5 10-11"/>',
+  glasses:'<circle cx="7" cy="13.5" r="4"/><circle cx="17" cy="13.5" r="4"/><path d="M11 13.5h2M3 13l1.5-6M21 13l-1.5-6"/>',
+  school:'<path d="M2.5 9L12 4.5 21.5 9 12 13.5zM6.5 11.5v5c3 2.5 8 2.5 11 0v-5"/>',
+  factory:'<path d="M3 20.5V10l6 4v-4l6 4V5h5v15.5z"/>',
+};
+const icon = (n, rot = 0) => `<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"${rot ? ` style="transform:rotate(${rot}deg)"` : ''}>${IC[n]}</svg>`;
+const STAR = '<path d="M12 2.6l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.5l-5.9 3.1 1.2-6.5L2.5 9.5l6.6-.9z"/>';
+const stars = (n, cls = '') => `<span class="stars ${cls}" role="img" aria-label="${n} out of 3 stars">${[0,1,2].map(i => `<svg viewBox="0 0 24 24" class="${i < n ? 'on' : ''}" aria-hidden="true">${STAR}</svg>`).join('')}</span>`;
+
+/* ---------- content ---------- */
+const SKILLS = [
+  {id:'solve', n:'Solving puzzles', i:'bulb'},
+  {id:'build', n:'Building things', i:'hammer'},
+  {id:'draw', n:'Drawing and designing', i:'pencil'},
+  {id:'maths', n:'Maths and numbers', i:'maths'},
+  {id:'code', n:'Computers and coding', i:'code'},
+  {id:'apart', n:'Finding out how things work', i:'cog'},
+  {id:'nature', n:'Caring for the planet', i:'leaf'},
+  {id:'team', n:'Working in a team', i:'team'},
+  {id:'detail', n:'Spotting tiny details', i:'search'},
+  {id:'why', n:'Asking “why?”', i:'why'},
+  {id:'talk', n:'Explaining my ideas', i:'talk'},
+  {id:'grit', n:'Never giving up', i:'flag'},
+];
+const SKILL = Object.fromEntries(SKILLS.map(s => [s.id, s]));
+
+const ROLES = {
+  design: {
+    n:'Design Engineer', i:'pencil', c:'#4338CA', cd:'#312E81',
+    tag:'You dream it up, then make it real.',
+    w:{draw:3, maths:2, talk:2, build:1, solve:1},
+    does:'Design engineers turn ideas into real things. They sketch, build 3D models on a computer and work out the best shape for every part.',
+    rr:'At Rolls-Royce, design engineers shape the giant fan at the front of a jet engine. The fan on the UltraFan test engine is 140 inches across, which is about 3.6 metres. That is taller than a basketball hoop!',
+    planet:'A smarter shape means an engine burns less fuel, and less fuel means less pollution. UltraFan is designed to be 25% more fuel-efficient than the first Trent engines.',
+    subjects:'Design and Technology, Maths, Art, Physics',
+    game:'Design the fan',
+  },
+  software: {
+    n:'Software Engineer', i:'code', c:'#7E22CE', cd:'#581C87',
+    tag:'You tell machines what to do.',
+    w:{code:3, solve:2, grit:2, maths:1, detail:1},
+    does:'Software engineers write the code that tells machines what to do. When something goes wrong they hunt down the bug and fix it.',
+    rr:'A jet engine is full of sensors and computers. Software engineers at Rolls-Royce write the code that controls the engine and checks it is healthy while the plane is flying.',
+    planet:'Clever code helps an engine use just the right amount of fuel. It also spots problems early, so parts last longer and less is thrown away.',
+    subjects:'Computer Science, Maths, Physics',
+    game:'Code the inspection bot',
+  },
+  materials: {
+    n:'Materials Engineer', i:'hex', c:'#BE185D', cd:'#831843',
+    tag:'You choose what things are made of.',
+    w:{why:3, detail:2, apart:2, maths:1, nature:1},
+    does:'Materials engineers choose, and sometimes invent, what things are made of. Should it be light? Bendy? Able to survive fire?',
+    rr:'Deep inside a jet engine, the gas rushing past the turbine blades is hotter than the melting point of the metal. Materials engineers at Rolls-Royce use special metals, coatings and tiny cooling holes so the blades survive.',
+    planet:'Lighter, tougher materials mean engines burn less fuel. Parts that last longer or can be recycled mean less waste.',
+    subjects:'Chemistry, Physics, Maths',
+    game:'Right material, right job',
+  },
+  manufacturing: {
+    n:'Manufacturing Engineer', i:'factory', c:'#C2410C', cd:'#7C2D12',
+    tag:'You work out how to build it.',
+    w:{build:3, team:2, grit:1, detail:1, apart:1, talk:1},
+    does:'Manufacturing engineers work out how to actually build things: which machines, robots and people do what, and in what order, so every part comes out right.',
+    rr:'A big jet engine has many thousands of parts. Manufacturing engineers at Rolls-Royce plan how each one is made, checked and fitted together.',
+    planet:'Good manufacturing wastes less metal and uses less energy. 3D printing a part uses only the material it needs.',
+    subjects:'Design and Technology, Maths, Physics',
+    game:'Build and check the engine',
+  },
+  electrical: {
+    n:'Electrical Engineer', i:'bolt', c:'#0369A1', cd:'#0C4A6E',
+    tag:'You bring machines to life.',
+    w:{apart:3, solve:2, maths:2, code:1, build:1},
+    does:'Electrical engineers design the circuits, motors, batteries and wiring that bring machines to life.',
+    rr:'Rolls-Royce built an all-electric plane called Spirit of Innovation. In 2021 it set world speed records for electric aircraft, flying at 345 miles per hour.',
+    planet:'Electric motors make no fumes while they run. Electrical engineers are also needed for wind farms, batteries and chargers.',
+    subjects:'Physics, Maths, Computer Science, Design and Technology',
+    game:'Power up the electric plane',
+  },
+  sustainability: {
+    n:'Sustainability Engineer', i:'leaf', c:'#15803D', cd:'#14532D',
+    tag:'You power the world without hurting it.',
+    w:{nature:3, team:2, talk:2, why:1, grit:1},
+    does:'Sustainability engineers work out how to give people the power and travel they need without harming the planet.',
+    rr:'Rolls-Royce has run its jet engines on 100% sustainable aviation fuel, which can be made from things like used cooking oil. It is also designing small nuclear power stations that make low-carbon electricity.',
+    planet:'This whole job is about the planet. The UK is aiming for “net zero” and could need up to 725,000 people in new green jobs to get there.',
+    subjects:'Science, Geography, Maths',
+    game:'Power the town',
+  },
+};
+const ROLE_IDS = Object.keys(ROLES);
+
+function match(picks) {
+  const score = id => picks.reduce((t, p) => t + (ROLES[id].w[p] || 0), 0);
+  return ROLE_IDS.slice().sort((a, b) => {
+    if (score(b) !== score(a)) return score(b) - score(a);
+    for (const p of picks) { const d = (ROLES[b].w[p] || 0) - (ROLES[a].w[p] || 0); if (d) return d; }
+    return 0;
+  });
+}
+
+/* ---------- avatar ---------- */
+const SKIN = ['#F8D9BF','#EBBE98','#D4A074','#B37C52','#8B5A3C','#5C3A26'];
+const COLS = [['Black','#1C1917'],['Dark brown','#4A2C17'],['Brown','#8A5A2B'],['Blonde','#E0B354'],['Ginger','#C2531A'],['Grey','#9AA3AF'],['Blue','#2563EB'],['Pink','#DB2777'],['Purple','#7C3AED'],['Teal','#0F766E']];
+const HAIR = [['short','Short'],['curly','Curly'],['long','Long'],['bun','Bun'],['braids','Braids'],['buzz','Very short'],['hijab','Hijab'],['turban','Turban']];
+
+function avatar(av, outfit = '#4F46E5', label = '') {
+  const sk = SKIN[av.skin], hc = COLS[av.col][1], h = av.hair;
+  const cap = `<path d="M60 94C56 60 80 45 100 45s44 15 40 49c-6-16-18-26-40-26S66 78 60 94Z" fill="${hc}"/>`;
+  let back = '', front = cap, ears = true;
+  if (h === 'curly') {
+    back = `<g fill="${hc}"><circle cx="100" cy="64" r="44"/>${[[61,86,17],[63,60,18],[81,42,18],[100,36,18],[119,42,18],[137,60,18],[139,86,17]].map(c => `<circle cx="${c[0]}" cy="${c[1]}" r="${c[2]}"/>`).join('')}</g>`;
+    front = `<path d="M62 90C60 64 82 52 100 52s40 12 38 38c-8-14-20-20-38-20s-30 6-38 20Z" fill="${hc}"/>`;
+  } else if (h === 'long') {
+    back = `<path d="M54 100C48 52 78 38 100 38s52 14 46 62l4 62c-14 6-26-4-30-20H80c-4 16-16 26-30 20Z" fill="${hc}"/>`;
+  } else if (h === 'bun') {
+    back = `<circle cx="100" cy="36" r="18" fill="${hc}"/>`;
+  } else if (h === 'braids') {
+    back = `<g fill="${hc}">${[60,140].map(x => [100,113,126,139,152,165].map(y => `<circle cx="${x}" cy="${y}" r="9"/>`).join('')).join('')}</g>`;
+    front = cap + `<path d="M100 46v22" stroke="rgba(255,255,255,.25)" stroke-width="2"/>`;
+  } else if (h === 'buzz') {
+    front = `<path d="M63 86C63 62 82 50 100 50s37 12 37 36c-8-13-20-19-37-19S71 73 63 86Z" fill="${hc}" opacity=".88"/>`;
+  } else if (h === 'hijab') {
+    ears = false;
+    front = `<path fill-rule="evenodd" d="M100 36C62 36 48 66 50 100c2 30 4 44-10 68h120c-14-24-12-38-10-68 2-34-12-64-50-64ZM100 62c18 0 30 16 30 38s-12 40-30 40-30-18-30-40 12-38 30-38Z" fill="${hc}"/><path d="M70 104c2 22 14 36 30 36s28-14 30-36" fill="none" stroke="rgba(0,0,0,.16)" stroke-width="3"/>`;
+  } else if (h === 'turban') {
+    front = `<path d="M57 86C52 50 78 32 100 32s48 18 43 54c-10-14-26-22-43-24-17 2-33 10-43 24Z" fill="${hc}"/><g fill="none" stroke="rgba(0,0,0,.2)" stroke-width="2.5" stroke-linecap="round"><path d="M100 62C92 50 96 40 110 34"/><path d="M100 62c10-10 24-14 38-6"/><path d="M100 62c-12-8-26-10-38-2"/></g><path d="M93 66l7-9 7 9Z" fill="rgba(255,255,255,.4)"/>`;
+  }
+  const glasses = av.glasses ? `<g fill="rgba(255,255,255,.25)" stroke="#1E1B4B" stroke-width="3"><circle cx="85" cy="100" r="11.5"/><circle cx="115" cy="100" r="11.5"/><path d="M96.5 100h7" fill="none"/></g>` : '';
+  return `<svg viewBox="0 0 200 200" ${label ? `role="img" aria-label="${esc(label)}"` : 'aria-hidden="true"'}>
+${back}<rect x="86" y="126" width="28" height="34" rx="10" fill="${sk}"/><rect x="86" y="126" width="28" height="16" fill="rgba(0,0,0,.1)"/>
+<path d="M36 204c0-34 28-52 64-52s64 18 64 52Z" fill="${outfit}"/><path d="M84 153c4 10 28 10 32 0" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="4" stroke-linecap="round"/>
+<rect x="118" y="172" width="22" height="15" rx="3" fill="#fff" opacity=".9"/>
+${ears ? `<circle cx="62" cy="102" r="9" fill="${sk}"/><circle cx="138" cy="102" r="9" fill="${sk}"/>` : ''}
+<ellipse cx="100" cy="97" rx="38" ry="44" fill="${sk}"/>
+${front}
+<circle cx="76" cy="113" r="7" fill="#F87171" opacity=".22"/><circle cx="124" cy="113" r="7" fill="#F87171" opacity=".22"/>
+<circle cx="86" cy="100" r="6.6" fill="#fff"/><circle cx="114" cy="100" r="6.6" fill="#fff"/><circle cx="86.5" cy="100.5" r="4" fill="#1E1B4B"/><circle cx="114.5" cy="100.5" r="4" fill="#1E1B4B"/><circle cx="88" cy="99" r="1.3" fill="#fff"/><circle cx="116" cy="99" r="1.3" fill="#fff"/>
+<path d="M87 116q13 14 26 0Z" fill="#fff" stroke="#1E1B4B" stroke-width="3" stroke-linejoin="round"/>
+${glasses}</svg>`;
+}
+
+/* ---------- state ---------- */
+const fresh = () => ({screen:'start', av:{skin:2, hair:'short', col:1, glasses:false}, name:'', picks:[], ranked:[], role:null, explore:false, done:{}, last:0, ch:null, g:null});
+let S = fresh();
+const who = () => S.name.trim() ? esc(S.name.trim()) : 'You';
+const role = () => ROLES[S.role];
+
+function go(screen) { S.screen = screen; S.g = null; render(); window.scrollTo(0, 0); const h = $('h1,h2', app); if (h) { h.tabIndex = -1; h.focus({preventScroll:true}); } }
+function render(keep) {
+  const fk = keep && document.activeElement && document.activeElement.getAttribute('data-f');
+  const r = role();
+  document.documentElement.style.setProperty('--role', r ? r.c : '#4F46E5');
+  document.documentElement.style.setProperty('--role-d', r ? r.cd : '#3730A3');
+  app.innerHTML = (S.screen === 'start' ? '' : topbar()) + SCREENS[S.screen]();
+  if (AFTER[S.screen]) AFTER[S.screen]();
+  if (fk) { const el = $(`[data-f="${fk}"]`); if (el) el.focus({preventScroll:true}); }
+}
+const BACK = {look:'start', skills:'look', role:() => S.explore ? 'explore' : 'skills', challenge:'role', result:'role', explore:'result'};
+function topbar() {
+  const step = {look:1, skills:2, role:3, challenge:4, result:4, explore:4}[S.screen];
+  return `<header class="top"><button class="back" data-a="back" aria-label="Go back">${icon('back')}</button>
+<ol class="steps" aria-label="Step ${step} of 4">${[1,2,3,4].map(i => `<li class="${i <= step ? 'on' : ''}"></li>`).join('')}</ol><span class="brand">${GAME_NAME}</span></header>`;
+}
+
+/* ---------- screens ---------- */
+const SCREENS = {}, AFTER = {};
+
+SCREENS.start = () => `<section class="hero">
+<div class="trio" aria-hidden="true">
+<div class="avw">${avatar({skin:4, hair:'curly', col:0}, '#C2410C')}</div>
+<div class="avw">${avatar({skin:1, hair:'hijab', col:9}, '#7E22CE')}</div>
+<div class="avw">${avatar({skin:2, hair:'short', col:1, glasses:true}, '#15803D')}</div></div>
+<h1>What kind of engineer could you be?</h1>
+<p class="lead">Make your character, pick 3 things you are good at, then take on a real engineering challenge.</p>
+<button class="btn big" data-a="go" data-to="look">Start</button>
+<p class="fact"><b>Did you know?</b> Nearly 1 in 5 jobs in the UK are in engineering and technology.</p>
+<p class="tiny">${GAME_NAME} · made for the Future Makers Challenge</p></section>`;
+
+SCREENS.look = () => {
+  const a = S.av;
+  return `<h2>Make your character</h2><p class="muted">Engineers look like everyone. Make yours look however you like.</p>
+<div class="look"><div class="me"><div class="avw">${avatar(a, '#4F46E5', 'Your character')}</div>
+<div class="field"><label for="nm">Name or nickname (if you want)</label><input id="nm" maxlength="14" autocomplete="off" value="${esc(S.name)}" placeholder="Type here"></div></div>
+<div><div class="grp"><h3 id="g1">Skin</h3><div class="sw" role="group" aria-labelledby="g1">${SKIN.map((c, i) => `<button style="background:${c}" data-a="av" data-k="skin" data-v="${i}" data-f="sk${i}" aria-pressed="${a.skin === i}" aria-label="Skin tone ${i + 1}"></button>`).join('')}</div></div>
+<div class="grp"><h3 id="g2">Hair or headwear</h3><div class="styles" role="group" aria-labelledby="g2">${HAIR.map(([id, n]) => `<button data-a="av" data-k="hair" data-v="${id}" data-f="h${id}" aria-pressed="${a.hair === id}"><div class="avw">${avatar({...a, hair:id, glasses:false})}</div>${n}</button>`).join('')}</div></div>
+<div class="grp"><h3 id="g3">Colour</h3><div class="sw" role="group" aria-labelledby="g3">${COLS.map(([n, c], i) => `<button style="background:${c}" data-a="av" data-k="col" data-v="${i}" data-f="c${i}" aria-pressed="${a.col === i}" aria-label="${n}"></button>`).join('')}</div></div>
+<div class="grp"><button class="tog" data-a="av" data-k="glasses" data-f="gl" aria-pressed="${a.glasses}">${icon('glasses')} Glasses</button></div>
+<button class="btn wide" data-a="go" data-to="skills">Next: pick your skills</button></div></div>`;
+};
+AFTER.look = () => { $('#nm').addEventListener('input', e => { S.name = e.target.value; }); };
+
+SCREENS.skills = () => {
+  const full = S.picks.length === 3;
+  return `<h2>Pick 3 things you are good at</h2><p class="muted">Or 3 things you enjoy. There are no wrong answers.</p>
+<div class="skills">${SKILLS.map(s => { const on = S.picks.includes(s.id); return `<button class="skill ${full && !on ? 'dim' : ''}" data-a="pick" data-id="${s.id}" data-f="s${s.id}" aria-pressed="${on}">${icon(s.i)}<span>${s.n}</span></button>`; }).join('')}</div>
+<div class="bar"><span class="count" role="status">${S.picks.length} of 3 picked</span><button class="btn" data-a="match" ${full ? '' : 'disabled'}>Find my engineer</button></div>`;
+};
+
+SCREENS.role = () => {
+  const r = role(), why = S.picks.filter(p => r.w[p]), also = S.ranked.find(id => id !== S.ranked[0]);
+  const mine = !S.explore;
+  return `<section class="pop"><div class="rolehead"><div class="avw">${avatar(S.av, r.cd, 'Your character as ' + r.n)}</div>
+<div><p class="kick">${mine ? who() + ' could be ' + (/^[AEIOU]/.test(r.n) ? 'an' : 'a') : 'Meet the'}</p><h2>${r.n}</h2><p>${r.tag}</p></div></div>
+${mine && why.length ? `<h3>Why it fits you</h3><ul class="chips">${why.map(p => `<li>${icon(SKILL[p].i)}${SKILL[p].n}</li>`).join('')}</ul>` : ''}
+<div class="info">
+<div class="card"><h3>${icon(r.i)} What you would do</h3><p>${r.does}</p></div>
+<div class="card"><h3>${icon('cog')} At Rolls-Royce</h3><p>${r.rr}</p></div>
+<div class="card green"><h3>${icon('leaf')} Helping the planet</h3><p>${r.planet}</p></div>
+<div class="card"><h3>${icon('school')} How to get there</h3><p><b>At school:</b> ${r.subjects}.</p><p><b>After school:</b> an apprenticeship, where you are paid while you learn, or university. Both lead to the same job.</p></div>
+</div>
+${mine && also ? `<p class="muted">You would also make a good <b>${ROLES[also].n}</b>.</p>` : ''}
+<div class="row"><button class="btn role big" data-a="play">${icon('play')} Take the challenge</button></div>
+<p class="muted" style="margin-top:10px">Your challenge: <b>${r.game}</b></p></section>`;
+};
+
+SCREENS.challenge = () => `<div class="chhead"><h2>${role().game}</h2><span id="chstars">${stars(0)}</span></div><div id="stage"></div>
+<div class="row center"><button class="link" data-a="finish">Skip to the end</button></div>`;
+AFTER.challenge = () => { S.ch = {stars:0}; GAMES[S.role](); };
+
+SCREENS.result = () => {
+  const r = role(), n = S.last;
+  const head = ['You gave it a go!', 'Good start!', 'Great work!', 'Outstanding!'][n];
+  return `<section class="result pop"><div class="avw">${avatar(S.av, r.cd, 'Your character')}</div><div class="badge">${r.n}</div>
+${stars(n, 'xl')}<h2>${head}</h2>
+<p style="max-width:28em">${who() === 'You' ? 'You' : who() + ', you'} just did the kind of thinking a real ${r.n.toLowerCase()} does every day. Real engineers test, get things wrong, fix them and try again.</p>
+<div class="row center"><button class="btn role" data-a="play">Play again</button><button class="btn sec" data-a="go" data-to="explore">Meet the other engineers</button></div>
+<button class="link" data-a="reset">New player</button></section>`;
+};
+
+SCREENS.explore = () => `<h2>Six kinds of engineer</h2><p class="muted">Tap one to find out what they do and try their challenge.</p>
+<div class="roles">${ROLE_IDS.map(id => { const r = ROLES[id]; return `<button class="roletile" style="--role:${r.c};--role-d:${r.cd}" data-a="open" data-id="${id}">${icon(r.i)}<span>${r.n}</span>${stars(S.done[id] || 0)}</button>`; }).join('')}</div>
+<div class="row center"><button class="btn sec" data-a="reset">New player</button></div>`;
+
+/* ---------- actions ---------- */
+const ACT = {
+  go: d => go(d.to),
+  back: () => { const b = BACK[S.screen]; go(typeof b === 'function' ? b() : b); },
+  av: d => { if (d.k === 'glasses') S.av.glasses = !S.av.glasses; else S.av[d.k] = d.k === 'hair' ? d.v : +d.v; render(true); },
+  pick: (d, el) => {
+    const i = S.picks.indexOf(d.id);
+    if (i >= 0) S.picks.splice(i, 1); else if (S.picks.length < 3) S.picks.push(d.id); else { el.classList.remove('shake'); void el.offsetWidth; el.classList.add('shake'); return; }
+    render(true);
+  },
+  match: () => { if (S.picks.length !== 3) return; S.ranked = match(S.picks); S.role = S.ranked[0]; S.explore = false; go('role'); },
+  play: () => go('challenge'),
+  open: d => { S.role = d.id; S.explore = true; go('role'); },
+  finish: () => { const n = S.ch ? S.ch.stars : 0; S.done[S.role] = Math.max(S.done[S.role] || 0, n); S.last = n; go('result'); },
+  reset: () => { S = fresh(); go('start'); },
+};
+app.addEventListener('click', e => { const b = e.target.closest('[data-a]'); if (b && !b.disabled && ACT[b.dataset.a]) ACT[b.dataset.a](b.dataset, b); });
+
+/* ---------- challenge helpers ---------- */
+const stage = () => $('#stage');
+function setStars(n) { S.ch.stars = Math.max(0, Math.min(3, n)); const el = $('#chstars'); if (el) el.innerHTML = stars(S.ch.stars); }
+function say(text, kind = '') { const m = $('#msg'); if (m) { m.className = 'msg ' + kind; m.textContent = text; } }
+const finishBtn = (label = 'See my result') => `<button class="btn role" data-a="finish">${label}</button>`;
+function meter(label, val, max, target, mode) {
+  const ok = mode === 'min' ? val >= target : val <= target;
+  return `<div class="meter ${ok ? 'ok' : 'no'}"><div class="mrow"><span>${label}</span><span>${val} <small>(${mode === 'min' ? 'need ' + target + '+' : 'max ' + target})</small> <span class="tag">${ok ? 'OK' : 'Not yet'}</span></span></div>
+<div class="mbar"><i style="width:${Math.min(100, val / max * 100)}%"></i><u style="left:${target / max * 100}%"></u></div></div>`;
+}
+const GAMES = {};
+
+/* ---------- software: code the bot ---------- */
+const BOT_LEVELS = [
+  {map:['.....','.....','S.#.T','.....','.....'], max:8},
+  {map:['S.#..','.##..','....#','.#...','.#..T'], max:10},
+  {map:['..#T.','.##.#','.....','.#.##','S#...'], max:10},
+];
+const MOVES = {u:[0,-1,0,'up'], r:[1,0,90,'right'], d:[0,1,180,'down'], l:[-1,0,270,'left']};
+const BOTSVG = '<svg viewBox="0 0 40 40"><path d="M20 3v6" stroke="#581C87" stroke-width="3" stroke-linecap="round"/><circle cx="20" cy="3.5" r="2.5" fill="#F59E0B"/><rect x="5" y="9" width="30" height="26" rx="9" fill="#7E22CE"/><rect x="10" y="15" width="20" height="11" rx="5.5" fill="#fff"/><circle cx="15.5" cy="20.5" r="2.6" fill="#1E1B4B"/><circle cx="24.5" cy="20.5" r="2.6" fill="#1E1B4B"/></svg>';
+GAMES.software = () => { S.g = {lv:0, prog:[], run:false, won:false}; botDraw(); };
+function botLevel() {
+  const L = BOT_LEVELS[S.g.lv], o = {max:L.max, walls:new Set()};
+  L.map.forEach((row, y) => [...row].forEach((ch, x) => { if (ch === '#') o.walls.add(x + ',' + y); if (ch === 'S') o.start = [x, y]; if (ch === 'T') o.goal = [x, y]; }));
+  return o;
+}
+function botDraw() {
+  const g = S.g, L = botLevel();
+  let cells = '';
+  for (let y = 0; y < 5; y++) for (let x = 0; x < 5; x++) {
+    const goal = L.goal[0] === x && L.goal[1] === y;
+    cells += `<div class="c ${L.walls.has(x + ',' + y) ? 'wall' : ''} ${goal ? 'goal' : ''}">${goal ? '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2l-4 7 6 3-5 5 3 5"/></svg>' : ''}</div>`;
+  }
+  stage().innerHTML = `<div class="brief"><b>Level ${g.lv + 1} of 3.</b> ${g.lv ? 'A trickier engine. Drive the bot to the <b>crack</b> without touching the <b>hot parts</b>.' : 'A tiny robot is inside the engine. Write code to drive it to the <b>crack</b> so it can take a photo. Do not touch the <b>hot parts</b> (orange stripes).'}</div>
+<div class="stagecols"><div class="botgrid" role="img" aria-label="Engine map">${cells}<div id="bot" style="transform:translate(${L.start[0] * 100}%,${L.start[1] * 100}%)">${BOTSVG}</div></div>
+<div><h3>Your code <span class="muted" id="cnt"></span></h3><div class="prog" id="prog"></div>
+<div class="pad">${['l','u','d','r'].map(k => `<button data-a="botAdd" data-k="${k}" aria-label="Add move ${MOVES[k][3]}">${icon('arrow', MOVES[k][2])}</button>`).join('')}</div>
+<div class="row"><button class="btn sec" data-a="botUndo">${icon('undo')} Undo</button><button class="btn role" data-a="botRun" id="runbtn">${icon('play')} Run code</button></div>
+<p class="msg" id="msg" role="status"></p><div id="nextslot"></div></div></div>`;
+  botProg();
+}
+function botProg(cur = -1) {
+  const g = S.g, L = BOT_LEVELS[g.lv];
+  $('#cnt').textContent = `(${g.prog.length} of ${L.max} steps)`;
+  $('#prog').innerHTML = g.prog.length ? g.prog.map((k, i) => `<button class="${i === cur ? 'cur' : ''}" data-a="botDel" data-i="${i}" aria-label="Step ${i + 1}: ${MOVES[k][3]}. Tap to remove">${icon('arrow', MOVES[k][2])}</button>`).join('') : '<span class="muted">Tap the arrows to add steps</span>';
+}
+ACT.botAdd = d => { const g = S.g; if (g.run || g.won) return; if (g.prog.length >= BOT_LEVELS[g.lv].max) return say('That is the most steps this bot can remember. Can you find a shorter way?', 'bad'); g.prog.push(d.k); botProg(); };
+ACT.botUndo = () => { const g = S.g; if (g.run || g.won) return; g.prog.pop(); botProg(); };
+ACT.botDel = d => { const g = S.g; if (g.run || g.won) return; g.prog.splice(+d.i, 1); botProg(); };
+ACT.botRun = async () => {
+  const g = S.g; if (g.run || g.won) return;
+  if (!g.prog.length) return say('Add some steps first.', 'bad');
+  g.run = true; say('Running…');
+  const L = botLevel(), bot = $('#bot'); let [x, y] = L.start, fail = '';
+  for (let i = 0; i < g.prog.length; i++) {
+    if (S.g !== g) return;
+    botProg(i);
+    const [dx, dy] = MOVES[g.prog[i]], nx = x + dx, ny = y + dy;
+    if (nx < 0 || ny < 0 || nx > 4 || ny > 4 || L.walls.has(nx + ',' + ny)) { fail = `Bump! Step ${i + 1} hit ${L.walls.has(nx + ',' + ny) ? 'a hot part' : 'the wall'}. Every coder gets bugs. Change your code and run it again.`; break; }
+    x = nx; y = ny; bot.style.transform = `translate(${x * 100}%,${y * 100}%)`;
+    await sleep(330);
+    if (x === L.goal[0] && y === L.goal[1]) break;
+  }
+  if (S.g !== g) return;
+  if (!fail && x === L.goal[0] && y === L.goal[1]) {
+    g.won = true; g.run = false; setStars(S.ch.stars + 1);
+    say('Photo taken! Your code worked.', 'good');
+    $('#nextslot').innerHTML = g.lv < 2 ? '<button class="btn role" data-a="botNext">Next level</button>' : finishBtn();
+    return;
+  }
+  if (!fail) fail = 'The bot stopped before it reached the crack. Add more steps and run it again.';
+  bot.classList.add('shake'); say(fail, 'bad');
+  await sleep(700);
+  if (S.g !== g) return;
+  bot.classList.remove('shake'); bot.style.transform = `translate(${L.start[0] * 100}%,${L.start[1] * 100}%)`; g.run = false; botProg();
+};
+ACT.botNext = () => { const g = S.g; g.lv++; g.prog = []; g.won = false; botDraw(); };
+
+/* ---------- electrical: connect the wires ---------- */
+const WIRE_LEVELS = [
+  {w:3, h:3, path:[[0,0],[1,0],[1,1],[1,2],[2,2]]},
+  {w:4, h:4, path:[[0,3],[1,3],[1,2],[1,1],[2,1],[3,1],[3,0]]},
+  {w:4, h:4, path:[[0,0],[0,1],[0,2],[1,2],[2,2],[2,1],[2,0],[3,0],[3,1],[3,2],[3,3]]},
+];
+const DIRS = [[0,-1,1,4],[1,0,2,8],[0,1,4,1],[-1,0,8,2]]; // dx, dy, this side, neighbour's side
+const turn = (m, n) => { for (let i = 0; i < n % 4; i++) m = ((m << 1) & 15) | (m >> 3); return m; };
+const bitTo = (a, b) => DIRS.find(d => a[0] + d[0] === b[0] && a[1] + d[1] === b[1])[2];
+GAMES.electrical = () => { S.g = {lv:0, won:false}; wireBuild(); };
+function wireBuild() {
+  const g = S.g, L = WIRE_LEVELS[g.lv];
+  g.won = false; g.L = L;
+  do {
+    g.t = Array.from({length:L.h}, () => Array.from({length:L.w}, () => ({base:rnd(3) ? 3 : 5, r:rnd(4), need:0})));
+    L.path.forEach((p, i) => {
+      const need = (i ? bitTo(p, L.path[i - 1]) : 8) | (i < L.path.length - 1 ? bitTo(p, L.path[i + 1]) : 2);
+      g.t[p[1]][p[0]] = {base:need === 5 || need === 10 ? 5 : 3, r:rnd(4), need};
+    });
+  } while (wirePower().done);
+  const r0 = L.path[0][1], r1 = L.path[L.path.length - 1][1];
+  let cells = '';
+  for (let y = 0; y < L.h; y++) for (let x = -1; x <= L.w; x++) {
+    if (x === -1) cells += `<div class="end">${y === r0 ? '<svg viewBox="0 0 100 100" role="img" aria-label="Battery"><rect x="6" y="23" width="64" height="54" rx="11" fill="#0369A1"/><rect x="70" y="39" width="9" height="22" rx="3" fill="#0C4A6E"/><path d="M79 50h21" stroke="#F59E0B" stroke-width="18"/><path d="M26 50h24M38 38v24" stroke="#fff" stroke-width="7" stroke-linecap="round"/></svg>' : ''}</div>`;
+    else if (x === L.w) cells += `<div class="end">${y === r1 ? '<svg viewBox="0 0 100 100" role="img" aria-label="Motor"><path d="M0 50h40" stroke="#94A3B8" stroke-width="18" id="mwire"/><g class="prop" id="prop"><ellipse cx="56" cy="25" rx="11" ry="25" fill="#0369A1"/><ellipse cx="56" cy="75" rx="11" ry="25" fill="#0369A1"/></g><circle cx="56" cy="50" r="15" fill="#0C4A6E"/></svg>' : ''}</div>`;
+    else { const t = g.t[y][x]; cells += `<button class="tile" data-a="wireTurn" data-x="${x}" data-y="${y}" aria-label="Wire piece, row ${y + 1}, column ${x + 1}. Tap to turn"><svg viewBox="0 0 100 100" style="transform:rotate(${t.r * 90}deg)"><path d="${t.base === 5 ? 'M50 0V100' : 'M50 0V50H100'}"/></svg></button>`; }
+  }
+  stage().innerHTML = `<div class="brief"><b>Level ${g.lv + 1} of 3.</b> ${g.lv ? 'A bigger circuit. Join the <b>battery</b> to the <b>motor</b>.' : 'The electric plane will not start. Tap the wire pieces to turn them until electricity can flow from the <b>battery</b> to the <b>motor</b>.'}</div>
+<div class="wgrid" style="grid-template-columns:repeat(${L.w + 2},1fr);max-width:${(L.w + 2) * 92}px">${cells}</div><p class="msg" id="msg" role="status"></p><div id="nextslot" class="row center"></div>`;
+  wirePaint();
+}
+function wirePower() {
+  const g = S.g, L = g.L, cur = (x, y) => turn(g.t[y][x].base, g.t[y][x].r), on = new Set();
+  const s = L.path[0], e = L.path[L.path.length - 1];
+  if (cur(s[0], s[1]) & 8) { const q = [s]; on.add(s[0] + ',' + s[1]);
+    while (q.length) { const [x, y] = q.pop(); for (const [dx, dy, a, b] of DIRS) { const nx = x + dx, ny = y + dy; if (nx < 0 || ny < 0 || nx >= L.w || ny >= L.h || on.has(nx + ',' + ny)) continue; if ((cur(x, y) & a) && (cur(nx, ny) & b)) { on.add(nx + ',' + ny); q.push([nx, ny]); } } } }
+  return {on, done:on.has(e[0] + ',' + e[1]) && !!(cur(e[0], e[1]) & 2)};
+}
+function wirePaint() { const p = wirePower(); $$('.tile').forEach(b => b.classList.toggle('on', p.on.has(b.dataset.x + ',' + b.dataset.y))); return p; }
+ACT.wireTurn = (d, el) => {
+  const g = S.g; if (g.won) return;
+  const t = g.t[+d.y][+d.x]; t.r++; $('svg', el).style.transform = `rotate(${t.r * 90}deg)`;
+  if (wirePaint().done) {
+    g.won = true; setStars(S.ch.stars + 1); $('#prop').classList.add('spin'); $('#mwire').setAttribute('stroke', '#F59E0B');
+    say('Power on! The propeller is spinning.', 'good');
+    $('#nextslot').innerHTML = g.lv < 2 ? '<button class="btn role" data-a="wireNext">Next level</button>' : finishBtn();
+  }
+};
+ACT.wireNext = () => { S.g.lv++; wireBuild(); };
+
+/* ---------- materials: pick the material ---------- */
+const MAT = {
+  cf:{n:'Carbon fibre', s:5, l:5, h:2}, steel:{n:'Steel', s:5, l:1, h:4}, plastic:{n:'Plastic', s:1, l:5, h:1},
+  nickel:{n:'Nickel superalloy', s:5, l:2, h:5}, alu:{n:'Aluminium', s:3, l:4, h:2},
+};
+const MAT_ROUNDS = [
+  {part:'Fan blade', need:'It sits at the cool front of the engine and spins incredibly fast. It must be <b>very strong</b> but <b>as light as possible</b>.', o:['steel','cf','plastic'], a:'cf',
+   why:'Carbon fibre is as strong as steel here but far lighter, so the engine burns less fuel. Plastic would snap.'},
+  {part:'Turbine blade', need:'It sits in gas that is <b>hotter than lava</b>. It must stay <b>strong in extreme heat</b>.', o:['alu','cf','nickel'], a:'nickel',
+   why:'Nickel superalloy keeps its strength when it is glowing hot. Aluminium would melt and carbon fibre would burn.'},
+  {part:'Main shaft', need:'A long rod that joins the turbine to the fan. It gets <b>quite hot</b> and must be <b>as strong as possible</b>. Being heavy matters less here.', o:['plastic','alu','steel'], a:'steel',
+   why:'Steel is heavy, but it is the strongest choice that can also take the heat. The lightest material is not always the best one.'},
+];
+GAMES.materials = () => { S.g = {r:0, picked:null}; matDraw(); };
+function matDraw() {
+  const g = S.g, R = MAT_ROUNDS[g.r];
+  const bar = (l, v) => `<span class="pbar"><span>${l}</span><i style="--v:${v * 20}%"></i></span>`;
+  stage().innerHTML = `<div class="brief"><b>Part ${g.r + 1} of 3: ${R.part}.</b> ${R.need}<br>Which material would you choose?</div>
+<div class="opts three">${R.o.map(id => { const m = MAT[id]; const cls = g.picked ? (id === R.a ? 'right' : id === g.picked ? 'wrong' : '') : '';
+    return `<button class="opt ${cls}" data-a="matPick" data-id="${id}" ${g.picked ? 'disabled' : ''} aria-label="${m.n}: strength ${m.s} out of 5, lightness ${m.l} out of 5, heat-proof ${m.h} out of 5"><b>${m.n}</b>${bar('Strong', m.s)}${bar('Light', m.l)}${bar('Heat-proof', m.h)}</button>`; }).join('')}</div>
+<p class="msg ${g.picked ? (g.picked === R.a ? 'good' : 'bad') : ''}" id="msg" role="status">${g.picked ? (g.picked === R.a ? 'Correct! ' : 'Not quite. ') + R.why : ''}</p>
+<div class="row center">${g.picked ? (g.r < 2 ? '<button class="btn role" data-a="matNext">Next part</button>' : finishBtn()) : ''}</div>`;
+}
+ACT.matPick = d => { const g = S.g; if (g.picked) return; g.picked = d.id; if (d.id === MAT_ROUNDS[g.r].a) setStars(S.ch.stars + 1); matDraw(); };
+ACT.matNext = () => { S.g.r++; S.g.picked = null; matDraw(); };
+
+/* ---------- manufacturing: build order, then quality check ---------- */
+const PARTS = [
+  {id:'fan', n:'Fan', d:'Sucks in a huge amount of air'},
+  {id:'comp', n:'Compressor', d:'Squeezes the air really tight'},
+  {id:'comb', n:'Combustor', d:'Burns fuel in the squeezed air'},
+  {id:'turb', n:'Turbine', d:'Hot gas spins it, and it drives the fan'},
+  {id:'noz', n:'Exhaust', d:'Gas rushes out of the back'},
+];
+const ZONES = ['20,10 60,14 60,106 20,110', '66,20 130,38 130,82 66,100', '136,34 180,34 180,86 136,86', '186,36 236,22 236,98 186,84', '242,22 284,38 284,82 242,98'];
+const ZX = [40, 98, 158, 211, 263];
+GAMES.manufacturing = () => { let o; do { o = shuffle(PARTS.map(p => p.id)); } while (o.every((id, i) => id === PARTS[i].id)); S.g = {part:0, placed:0, miss:0, order:o, q:0, bad:rnd(12), picked:-1}; mfgDraw(); };
+function mfgDraw() {
+  const g = S.g;
+  if (g.part === 0) {
+    stage().innerHTML = `<div class="brief"><b>Job 1 of 2: build it.</b> Air goes through a jet engine from front to back. Tap the parts in the order the air meets them. Clue: <b>suck, squeeze, bang, blow</b>.</div>
+<svg class="engine" viewBox="0 0 304 120" role="img" aria-label="Engine with ${g.placed} of 5 parts fitted">${ZONES.map((z, i) => `<polygon class="z ${i < g.placed ? 'in' : ''}" points="${z}" stroke-linejoin="round"/><text x="${ZX[i]}" y="60">${i < g.placed ? i + 1 : '?'}</text>`).join('')}</svg>
+<div class="opts">${g.order.map(id => { const p = PARTS.find(x => x.id === id), done = PARTS.findIndex(x => x.id === id) < g.placed; return `<button class="opt ${done ? 'done' : ''}" data-a="mfgPlace" data-id="${id}" ${done ? 'disabled' : ''}><b>${p.n}</b><small>${p.d}</small></button>`; }).join('')}</div>
+<p class="msg" id="msg" role="status"></p><div id="nextslot" class="row center"></div>`;
+  } else {
+    const hard = g.q === 1;
+    const blade = i => `<svg viewBox="0 0 90 100" aria-hidden="true"><path d="M30 96C18 62 26 26 50 4c16 26 22 58 14 92Z" fill="#94A3B8"/><path d="M36 90C28 62 34 34 49 14" fill="none" stroke="#CBD5E1" stroke-width="4" stroke-linecap="round"/>${i === g.bad ? (hard ? '<path d="M62 54l-6 3 5 4" fill="none" stroke="#1E1B4B" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>' : '<path d="M50 34l8 5-7 6 6 6" fill="none" stroke="#1E1B4B" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>') : ''}</svg>`;
+    const over = g.picked >= 0;
+    stage().innerHTML = `<div class="brief"><b>Job 2 of 2: check it (${g.q + 1} of 2).</b> Every blade is checked before it goes into an engine. One of these 12 has a ${hard ? '<b>tiny</b> ' : ''}crack. Tap it.</div>
+<div class="blades">${Array.from({length:12}, (_, i) => `<button data-a="mfgBlade" data-i="${i}" class="${over && i === g.bad ? 'right' : over && i === g.picked ? 'wrong' : ''}" ${over ? 'disabled' : ''} aria-label="Blade ${i + 1}">${blade(i)}</button>`).join('')}</div>
+<p class="msg ${over ? (g.picked === g.bad ? 'good' : 'bad') : ''}" id="msg" role="status">${over ? (g.picked === g.bad ? 'Well spotted! That blade goes back to be fixed.' : 'That one was fine. The cracked blade is shown in green.') : ''}</p>
+<div class="row center">${over ? (g.q === 0 ? '<button class="btn role" data-a="mfgNext">Next batch</button>' : finishBtn()) : ''}</div>`;
+  }
+}
+ACT.mfgPlace = (d, el) => {
+  const g = S.g;
+  if (d.id !== PARTS[g.placed].id) { g.miss++; el.classList.remove('shake'); void el.offsetWidth; el.classList.add('shake'); return say('Not that one yet. What does the air meet next?', 'bad'); }
+  g.placed++; mfgDraw();
+  if (g.placed === 5) {
+    if (g.miss <= 1) setStars(S.ch.stars + 1);
+    say(g.miss <= 1 ? 'Engine built! Suck, squeeze, bang, blow.' : 'Engine built! It took a few tries, and that is how engineers learn.', 'good');
+    $('#nextslot').innerHTML = '<button class="btn role" data-a="mfgNext">Next job</button>';
+  }
+};
+ACT.mfgBlade = d => { const g = S.g; if (g.picked >= 0) return; g.picked = +d.i; if (g.picked === g.bad) setStars(S.ch.stars + 1); mfgDraw(); };
+ACT.mfgNext = () => { const g = S.g; if (g.part === 0) g.part = 1; else g.q++; g.picked = -1; g.bad = rnd(12); mfgDraw(); };
+
+/* ---------- sustainability: power the town ---------- */
+const SRC = [
+  {id:'wind', n:'Wind farm', p:2, c:2, co:0, on:false, d:'Clean, but only works when it is windy'},
+  {id:'solar', n:'Solar park', p:1, c:1, co:0, on:false, d:'Clean, but only works in daylight'},
+  {id:'smr', n:'Small nuclear reactor', p:5, c:6, co:0, on:true, d:'Clean and always on, but costs a lot to build'},
+  {id:'gas', n:'Gas power station', p:3, c:2, co:3, on:true, d:'Always on, but makes carbon dioxide'},
+  {id:'coal', n:'Coal power station', p:4, c:2, co:6, on:true, d:'Cheap and always on, but makes the most carbon dioxide'},
+];
+const TOWN = {power:10, coins:12, steady:4};
+GAMES.sustainability = () => { S.g = {n:{wind:0, solar:0, smr:0, gas:0, coal:0}, on:false}; ecoDraw(); };
+function ecoTotals() { const t = {p:0, c:0, co:0, st:0}; for (const s of SRC) { const k = S.g.n[s.id]; t.p += k * s.p; t.c += k * s.c; t.co += k * s.co; if (s.on) t.st += k * s.p; } t.ok = t.p >= TOWN.power && t.c <= TOWN.coins && t.st >= TOWN.steady; return t; }
+function ecoDraw() {
+  const g = S.g, t = ecoTotals();
+  const got = t.co === 0 ? 3 : t.co <= 3 ? 2 : 1;
+  stage().innerHTML = `<div class="brief">A town needs electricity. Choose what to build so there is <b>enough power</b>, some of it <b>always on</b> (even on a calm night), without running out of <b>coins</b>. For 3 stars, make <b>no carbon dioxide</b>.</div>
+<div class="stagecols"><div class="card eco">${meter('Power', t.p, 16, TOWN.power, 'min')}${meter('Always-on power', t.st, 16, TOWN.steady, 'min')}${meter('Coins spent', t.c, 16, TOWN.coins, 'max')}
+<div class="meter ${t.co === 0 ? 'ok' : 'no'}"><div class="mrow"><span>Carbon dioxide</span><span>${t.co} <span class="tag">${t.co === 0 ? 'None' : 'Polluting'}</span></span></div><div class="mbar"><i style="width:${Math.min(100, t.co / 16 * 100)}%"></i></div></div>
+<p class="msg ${g.on ? 'good' : ''}" id="msg" role="status">${g.on ? (got === 3 ? 'Net zero! The whole town is running on clean power.' : got === 2 ? 'The lights are on, with only a little pollution. Can you get it to zero?' : 'The lights are on, but the air is dirty. Can you swap in cleaner power?') : ''}</p>
+<div class="row">${g.on ? `<button class="btn sec" data-a="ecoAgain">Change my plan</button>${finishBtn()}` : `<button class="btn role" data-a="ecoOn" ${t.ok ? '' : 'disabled'}>${icon('bolt')} Switch on</button>`}</div></div>
+<div class="srcs">${SRC.map(s => `<div class="src"><div><b>${s.n}</b><small>${s.d}</small><span class="nums">Power ${s.p} · Coins ${s.c} · CO₂ ${s.co}</span></div>
+<div class="step"><button data-a="ecoStep" data-id="${s.id}" data-v="-1" data-f="m${s.id}" ${g.n[s.id] === 0 || g.on ? 'disabled' : ''} aria-label="One fewer ${s.n}">−</button><output aria-label="${s.n} count">${g.n[s.id]}</output><button data-a="ecoStep" data-id="${s.id}" data-v="1" data-f="p${s.id}" ${g.n[s.id] >= 5 || g.on ? 'disabled' : ''} aria-label="One more ${s.n}">+</button></div></div>`).join('')}</div></div>`;
+}
+function ecoKeep(fn) { const f = document.activeElement && document.activeElement.getAttribute('data-f'); fn(); ecoDraw(); const el = f && $(`[data-f="${f}"]`); if (el && !el.disabled) el.focus({preventScroll:true}); }
+ACT.ecoStep = d => ecoKeep(() => { const g = S.g; g.n[d.id] = Math.max(0, Math.min(5, g.n[d.id] + +d.v)); });
+ACT.ecoOn = () => { const t = ecoTotals(); if (!t.ok) return; S.g.on = true; setStars(Math.max(S.ch.stars, t.co === 0 ? 3 : t.co <= 3 ? 2 : 1)); ecoDraw(); };
+ACT.ecoAgain = () => { S.g.on = false; ecoDraw(); };
+
+/* ---------- design: design the fan ---------- */
+const FAN = {
+  size:[{n:'Small', d:'Light, moves less air', t:4, w:2, r:30}, {n:'Medium', d:'In between', t:6, w:3, r:42}, {n:'Large', d:'Moves the most air, but heavy', t:8, w:5, r:56}],
+  mat:[{n:'Steel', d:'Strong but heavy', w:3, c:'#64748B'}, {n:'Titanium', d:'Strong and lighter', w:2, c:'#94A3B8'}, {n:'Carbon fibre', d:'Strong and very light', w:1, c:'#1E293B'}],
+  shape:[{n:'Straight', d:'Simple to make', t:0, z:3}, {n:'Curved', d:'Slices the air more smoothly', t:1, z:1}],
+};
+const FAN_Q = [['size','Fan size'], ['mat','Blade material'], ['shape','Blade shape']];
+GAMES.design = () => { S.g = {size:1, mat:0, shape:0, tests:0, res:null, won:false}; fanDraw(); };
+function fanDraw() {
+  const g = S.g, sz = FAN.size[g.size], mt = FAN.mat[g.mat], R = sz.r;
+  const blade = g.shape ? `M-4 -9C-${R * .28} -${R * .5} -${R * .1} -${R} ${R * .16} -${R}C${R * .12} -${R * .6} 7 -${R * .4} 4 -9Z` : `M-3.5 -9L-6 -${R}L6 -${R}L3.5 -9Z`;
+  const r = g.res;
+  stage().innerHTML = `<div class="brief">An airline wants a new engine fan with <b>lots of thrust</b> (push). It must <b>not be too heavy</b> and it must be <b>quiet</b> for people who live near airports. Choose a design, then test it. Engineers rarely get it right first time!</div>
+<div class="stagecols"><div><div class="fanbox"><svg viewBox="-64 -64 128 128" role="img" aria-label="${sz.n} fan, ${mt.n}, ${FAN.shape[g.shape].n.toLowerCase()} blades"><circle r="${R + 5}" fill="none" stroke="#C7D2FE" stroke-width="4"/><g class="fan ${r ? 'spin' : ''}">${Array.from({length:12}, (_, i) => `<path d="${blade}" fill="${mt.c}" transform="rotate(${i * 30})"/>`).join('')}</g><circle r="9" fill="#4338CA"/><path d="M0 -6a6 6 0 0 1 6 6" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/></svg></div>
+${r ? `<div class="card" id="fanres">${meter('Thrust', r.t, 10, 8, 'min')}${meter('Weight', r.w, 10, 6, 'max')}${meter('Noise', r.z, 4, 2, 'max')}<p class="msg ${g.won ? 'good' : 'bad'}" id="msg" role="status">${r.msg}</p>${g.won ? finishBtn() : ''}</div>` : ''}</div>
+<div>${FAN_Q.map(([k, label]) => `<h3 id="f${k}">${label}</h3><div class="seg" role="group" aria-labelledby="f${k}" style="grid-template-columns:repeat(${FAN[k].length},1fr)">${FAN[k].map((o, i) => `<button class="opt" data-a="fanSet" data-k="${k}" data-v="${i}" data-f="${k}${i}" aria-pressed="${g[k] === i}" ${g.won ? 'disabled' : ''}><b>${o.n}</b><small>${o.d}</small></button>`).join('')}</div>`).join('')}
+<div class="row">${g.won ? '' : `<button class="btn role" data-a="fanTest">${icon('play')} Test design${g.tests ? ' (test ' + (g.tests + 1) + ')' : ''}</button>`}</div></div></div>`;
+}
+ACT.fanSet = d => { const g = S.g; if (g.won) return; const f = d.k + d.v; g[d.k] = +d.v; g.res = null; fanDraw(); const el = $(`[data-f="${f}"]`); if (el) el.focus({preventScroll:true}); };
+ACT.fanTest = () => {
+  const g = S.g, sz = FAN.size[g.size], sh = FAN.shape[g.shape];
+  const r = {t:sz.t + sh.t, w:sz.w + FAN.mat[g.mat].w, z:sh.z}; g.tests++;
+  const bad = [];
+  if (r.t < 8) bad.push('Not enough thrust: a bigger fan moves more air.');
+  if (r.w > 6) bad.push('Too heavy: try a lighter blade material.');
+  if (r.z > 2) bad.push('Too noisy: try a different blade shape.');
+  g.won = !bad.length;
+  r.msg = g.won ? `It passed every test on try ${g.tests}! The newest Rolls-Royce fan blades are made of carbon fibre with a titanium edge.` : bad.join(' ');
+  g.res = r;
+  if (g.won) setStars(g.tests <= 2 ? 3 : g.tests <= 4 ? 2 : 1);
+  fanDraw();
+  $('#fanres').scrollIntoView({block:'center', behavior:matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'});
+};
+
+render();
+</script>
+</body>
+</html>
