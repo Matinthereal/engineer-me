@@ -3,925 +3,190 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#9BD8FF">
+<meta name="theme-color" content="#0B1B4D">
 <title>Engineer Me</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Jersey+15&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Crect width='16' height='16' fill='%230B1B4D'/%3E%3Crect x='4' y='3' width='8' height='7' fill='%23D4A074'/%3E%3Crect x='3' y='1' width='10' height='3' fill='%23F5E12B'/%3E%3Crect x='5' y='5' width='2' height='2' fill='%23fff'/%3E%3Crect x='9' y='5' width='2' height='2' fill='%23fff'/%3E%3Crect x='4' y='10' width='8' height='5' fill='%232447C9'/%3E%3C/svg%3E">
 <style>
+/* Jersey 15 (SIL Open Font License, see fonts/OFL.txt) is served from this folder so the game needs nothing from other sites */
+@font-face{font-family:"Jersey 15";src:url(fonts/jersey15.woff2) format("woff2");font-display:swap}
 :root{
-  --sky:#9BD8FF; --ink:#1E1B4B; --muted:#33405E; --card:#fff; --pri:#4F46E5; --yel:#FACC15;
-  --ok:#15803D; --bad:#B91C1C; --gold:#F59E0B; --role:#4F46E5; --role-d:#3730A3; --sh:rgba(30,27,75,.35);
+  --navy:#0B1B4D; --ink:#0B1437; --blue:#1D3FBF; --pale:#EEF3FF; --silver:#C9D1E3; --yel:#F5E12B;
+  --ok:#15803D; --bad:#B91C1C; --gold:#F59E0B; --role:#1D3FBF; --role-d:#14275E; --sh:rgba(11,20,55,.3);
 }
 *{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
-body{margin:0;color:var(--ink);font:400 22px/1.25 "Jersey 15","Trebuchet MS",system-ui,sans-serif;font-synthesis:none;letter-spacing:.015em;min-height:100vh;min-height:100dvh;
-  background:var(--sky) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='260' shape-rendering='crispEdges'%3E%3Cg fill='%23fff' opacity='.75'%3E%3Crect x='30' y='48' width='96' height='16'/%3E%3Crect x='54' y='32' width='48' height='16'/%3E%3Crect x='250' y='168' width='112' height='16'/%3E%3Crect x='274' y='152' width='56' height='16'/%3E%3C/g%3E%3C/svg%3E")}
+html{-webkit-text-size-adjust:100%;font-size:22px}
+@media(min-width:720px){html{font-size:25px}}
+body{margin:0;color:var(--ink);background:var(--pale);font:400 1rem/1.25 "Jersey 15","Trebuchet MS",system-ui,sans-serif;font-synthesis:none;letter-spacing:.015em;min-height:100vh;min-height:100dvh}
+/* the row of bars across the top echoes the Future Makers Challenge sheet */
+.band{height:18px;background:linear-gradient(90deg,#0B1B4D,#1D3FBF 55%,#8FB4FF);-webkit-mask:repeating-linear-gradient(90deg,#000 0 6px,transparent 6px 10px);mask:repeating-linear-gradient(90deg,#000 0 6px,transparent 6px 10px)}
 .wrap{max-width:980px;margin:0 auto;padding:12px max(16px,env(safe-area-inset-right)) calc(28px + env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}
-@media(min-width:720px){body{font-size:25px}.wrap{padding-top:20px}}
-h1,h2,h3{font-weight:700;line-height:1.1;margin:0 0 8px}
-h1{font-size:clamp(2.2rem,8vw,3.6rem);text-shadow:3px 3px 0 #fff} h2{font-size:clamp(1.7rem,5.5vw,2.3rem)} h3{font-size:1.3rem}
-b{color:var(--role-d)}
-.opt b,.src b,.msg b{color:inherit}
+h1,h2,h3{font-weight:400;line-height:1.05;margin:0 0 8px;color:var(--navy)}
+h1{font-size:clamp(2.1rem,8vw,3.4rem)} h2{font-size:clamp(1.6rem,5.5vw,2.2rem)} h3{font-size:1.25rem}
 h1:focus,h2:focus{outline:none}
 p{margin:0 0 12px}
-button{font:inherit;color:inherit;touch-action:manipulation;-webkit-tap-highlight-color:transparent;border-radius:0}
-button:focus-visible,input:focus-visible,canvas:focus-visible{outline:4px solid #fff;outline-offset:2px;box-shadow:0 0 0 8px var(--ink)}
+b{font-weight:400;color:var(--role-d)}
+button{font:inherit;color:inherit;letter-spacing:inherit;touch-action:manipulation;-webkit-tap-highlight-color:transparent;border-radius:0}
+button:focus-visible,input:focus-visible,canvas:focus-visible{outline:4px solid var(--yel);outline-offset:2px;box-shadow:0 0 0 8px var(--ink)}
 svg{display:block}
-.ico{width:1.5em;height:1.5em;flex:none;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:square;stroke-linejoin:miter}
+.ico{width:1.4em;height:1.4em;flex:none;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:square;stroke-linejoin:miter}
 
 .top{display:flex;align-items:center;gap:10px;margin-bottom:14px}
 .back{width:50px;height:50px;border:4px solid var(--ink);background:#fff;box-shadow:0 5px 0 var(--ink);display:grid;place-items:center;cursor:pointer}
 .back:active{transform:translateY(5px);box-shadow:none}
 .steps{flex:1;display:flex;gap:6px;list-style:none;margin:0;padding:0}
 .steps li{flex:1;height:14px;background:#fff;border:3px solid var(--ink)}
-.steps li.on{background:var(--yel)}
-.brand{font-size:1.1rem;white-space:nowrap}
+.steps li.on{background:var(--blue)}
+.brand{white-space:nowrap;color:var(--navy)}
 
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:700;font-size:1.25rem;min-height:56px;padding:8px 22px;border:4px solid var(--ink);background:var(--yel);color:var(--ink);box-shadow:0 6px 0 var(--ink);cursor:pointer;transition:transform .08s steps(2),box-shadow .08s steps(2)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-size:1.25rem;min-height:56px;padding:8px 22px;border:4px solid var(--ink);background:var(--yel);color:var(--ink);box-shadow:0 6px 0 var(--ink);cursor:pointer;transition:transform .08s steps(2),box-shadow .08s steps(2)}
 .btn:active{transform:translateY(6px);box-shadow:none}
 .btn.sec{background:#fff}
+.btn.blue{background:var(--blue);color:#fff}
 .btn.role{background:var(--role);color:#fff}
 .btn[disabled],.btn.role[disabled]{background:#CBD5E1;color:#475569;border-color:#64748B;box-shadow:0 6px 0 #64748B;cursor:not-allowed}
-.btn.big{font-size:1.6rem;min-height:68px;padding:10px 44px}
+.btn.big{font-size:1.6rem;min-height:68px;padding:10px 40px}
 .btn.wide{width:100%}
-.link{background:none;border:0;color:var(--ink);text-decoration:underline;min-height:48px;padding:8px 12px;cursor:pointer;font-weight:600}
+.link{background:none;border:0;color:var(--ink);text-decoration:underline;min-height:48px;padding:8px 12px;cursor:pointer}
 .row{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
 .center{text-align:center;justify-content:center}
-.card{background:var(--card);border:4px solid var(--ink);padding:16px;box-shadow:6px 6px 0 var(--sh)}
-.muted{color:var(--muted)}
+.card{background:#fff;border:4px solid var(--ink);padding:14px 16px;box-shadow:6px 6px 0 var(--sh)}
 .pop{animation:pop .3s steps(4) both}
 @keyframes pop{from{transform:scale(.9);opacity:0}to{transform:none;opacity:1}}
 @keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
 .shake{animation:shake .35s steps(6)}
-@keyframes spin{to{transform:rotate(360deg)}}
 @keyframes bob{50%{transform:translateY(-8px)}}
 
-/* character tiles */
-.avw{background:#DBEAFE;aspect-ratio:1;border:4px solid var(--ink);box-shadow:5px 5px 0 var(--sh);overflow:hidden}
+.avw{background:#DCE8FF;aspect-ratio:1;border:4px solid var(--ink);box-shadow:5px 5px 0 var(--sh);overflow:hidden}
 .avw svg{width:100%;height:100%}
 
-/* start */
-.hero{text-align:center;padding:3vh 0 0;display:flex;flex-direction:column;align-items:center}
-.trio{display:flex;justify-content:center;gap:10px;margin-bottom:22px;align-items:flex-end}
+.hero{text-align:center;padding:2vh 0 0;display:flex;flex-direction:column;align-items:center}
+.trio{display:flex;justify-content:center;gap:10px;margin-bottom:20px;align-items:flex-end}
 .trio .avw{width:min(27vw,150px)}
 .trio .avw:nth-child(2){animation:bob 1.2s steps(4) infinite}
-.hero p.lead{font-size:1.25rem;max-width:30em}
-.fact{margin-top:28px;background:#fff;border:4px solid var(--ink);padding:10px 16px;max-width:30em;box-shadow:6px 6px 0 var(--sh)}
-.fact b{color:var(--pri)}
-.tiny{font-size:1rem;margin-top:18px}
+.hero p.lead{font-size:1.2rem;max-width:26em}
+.fact{margin-top:24px;background:var(--navy);color:#fff;border:4px solid var(--ink);padding:10px 16px;max-width:26em;box-shadow:6px 6px 0 var(--sh)}
+.fact b{color:var(--yel)}
+.tiny{font-size:.85rem;margin-top:18px;max-width:28em}
+.know{display:grid;gap:14px;max-width:420px;margin:18px auto}
 
-/* look */
-.look{display:grid;gap:18px}
-.look .me{display:flex;flex-direction:column;align-items:center;gap:12px}
-.look .me .avw{width:min(56vw,250px)}
+.look{display:grid;gap:16px}
+.look .me{display:flex;flex-direction:column;align-items:center;gap:10px}
+.look .me .avw{width:min(48vw,230px)}
 .field{width:100%;max-width:300px}
-.field label{display:block;font-weight:700;margin-bottom:4px}
-.field input{width:100%;font:inherit;font-weight:600;min-height:52px;padding:8px 14px;border-radius:0;border:4px solid var(--ink);background:#fff;color:var(--ink)}
+.field label{display:block;margin-bottom:4px}
+.field input{width:100%;font:inherit;letter-spacing:inherit;min-height:52px;padding:8px 14px;border-radius:0;border:4px solid var(--ink);background:#fff;color:var(--ink)}
 .grp{margin-bottom:14px}
 .grp h3{margin-bottom:8px}
 .sw{display:flex;flex-wrap:wrap;gap:10px}
 .sw button{width:48px;height:48px;border:4px solid var(--ink);cursor:pointer;padding:0}
 .sw button[aria-pressed=true]{box-shadow:0 0 0 4px #fff,0 0 0 8px var(--ink);transform:translateY(-3px)}
-.styles{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-.styles button{background:#fff;border:4px solid var(--ink);padding:6px 2px 4px;cursor:pointer;font-size:1rem;font-weight:600;line-height:1.2;min-height:48px}
-.styles button .avw{width:80%;margin:0 auto 4px;box-shadow:none;border-width:3px}
+.styles{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.styles.five{grid-template-columns:repeat(3,1fr)}
+@media(min-width:520px){.styles.five{grid-template-columns:repeat(5,1fr)}}
+.styles button{min-width:0}
+.styles button{background:#fff;border:4px solid var(--ink);padding:5px 2px 3px;cursor:pointer;font-size:.9rem;line-height:1.05;min-height:48px}
+.styles button .avw{width:82%;margin:0 auto 3px;box-shadow:none;border-width:3px}
 .styles button[aria-pressed=true],.tog[aria-pressed=true]{background:var(--yel);box-shadow:0 5px 0 var(--ink);transform:translateY(-3px)}
-.tog{background:#fff;border:4px solid var(--ink);min-height:52px;padding:6px 16px;font-weight:700;cursor:pointer;display:inline-flex;gap:8px;align-items:center}
-@media(min-width:720px){.look{grid-template-columns:290px 1fr;align-items:start}.look .me{position:sticky;top:16px}.look .me .avw{width:250px}}
+.styles button[disabled]{opacity:.45;cursor:not-allowed}
+.tog{background:#fff;border:4px solid var(--ink);min-height:52px;padding:6px 16px;cursor:pointer;display:inline-flex;gap:8px;align-items:center}
+@media(min-width:720px){.look{grid-template-columns:270px 1fr;align-items:start}.look .me{position:sticky;top:16px}.look .me .avw{width:250px}}
 
-/* skills */
 .skills{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:14px 0 18px}
 @media(min-width:620px){.skills{grid-template-columns:repeat(3,1fr)}}
 @media(min-width:860px){.skills{grid-template-columns:repeat(4,1fr)}}
-.skill{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;min-height:104px;padding:10px 8px;background:#fff;border:4px solid var(--ink);box-shadow:0 6px 0 var(--ink);cursor:pointer;font-weight:600;line-height:1.15}
-.skill .ico{width:34px;height:34px;color:var(--pri)}
-.skill[aria-pressed=true]{background:var(--pri);color:#fff;transform:translateY(4px);box-shadow:0 2px 0 var(--ink)}
+.skill{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;min-height:100px;padding:10px 8px;background:#fff;border:4px solid var(--ink);box-shadow:0 6px 0 var(--ink);cursor:pointer;line-height:1.05}
+.skill .ico{width:34px;height:34px;color:var(--blue)}
+.skill[aria-pressed=true]{background:var(--blue);color:#fff;transform:translateY(4px);box-shadow:0 2px 0 var(--ink)}
 .skill[aria-pressed=true] .ico{color:var(--yel)}
 .skill.dim{background:#E2E8F0;color:#475569;box-shadow:0 6px 0 #64748B;border-color:#64748B}
 .skill.dim .ico{color:#64748B}
-.bar{position:sticky;bottom:0;margin:0 -16px;padding:12px 16px calc(12px + env(safe-area-inset-bottom));background:linear-gradient(transparent,var(--sky) 30%);display:flex;gap:12px;align-items:center;justify-content:space-between}
-.count{font-weight:700;font-size:1.15rem}
+.bar{position:sticky;bottom:0;margin:0 -16px;padding:12px 16px calc(12px + env(safe-area-inset-bottom));background:linear-gradient(transparent,var(--pale) 30%);display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
 
-/* role card */
-.rolehead{background:var(--role);color:#fff;border:4px solid var(--ink);padding:16px;display:flex;gap:16px;align-items:center;box-shadow:6px 6px 0 var(--sh);margin-bottom:16px}
-.rolehead .avw{width:112px;flex:none;box-shadow:none}
-.rolehead .kick{font-weight:600;margin:0}
+.rolehead{background:var(--role);color:#fff;border:4px solid var(--ink);padding:14px;display:flex;gap:14px;align-items:center;box-shadow:6px 6px 0 var(--sh);margin-bottom:16px}
+.rolehead .avw{width:108px;flex:none;box-shadow:none}
 .rolehead h2{color:#fff;margin:0 0 4px}
 .rolehead p{margin:0}
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px;padding:0;list-style:none}
-.chips li{display:inline-flex;align-items:center;gap:6px;background:#fff;border:3px solid var(--ink);padding:4px 12px 4px 8px;font-weight:600}
+.chips li{display:inline-flex;align-items:center;gap:6px;background:#fff;border:3px solid var(--ink);padding:3px 12px 3px 8px}
 .chips .ico{color:var(--role);width:22px;height:22px}
-.info{display:grid;gap:16px;margin-bottom:20px}
-@media(min-width:720px){.info{grid-template-columns:1fr 1fr 1fr}.info.two{grid-template-columns:1fr 1fr}}
+.info{display:grid;gap:16px;margin-bottom:18px}
+@media(min-width:720px){.info{grid-template-columns:1fr 1fr 1fr}}
 .info .card h3{display:flex;align-items:center;gap:8px;color:var(--role-d)}
 .info .card p:last-child{margin:0}
 .info .green{background:#DCFCE7}
 .info .green h3{color:#166534}
+.how{background:var(--navy);color:#fff;border:4px solid var(--ink);padding:14px 16px;box-shadow:6px 6px 0 var(--sh);margin-bottom:18px}
+.how h3{color:var(--yel)}
+.how ol{margin:0 0 12px;padding-left:1.3em}
+.how li{margin-bottom:4px}
+.how .btn.big{width:100%;font-size:1.45rem;padding:8px 16px}
 
-/* level */
 .chhead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
-.chhead h2{margin:0}
+.chhead h2{margin:0;font-size:clamp(1.35rem,5vw,2.2rem)}
 .stars{display:inline-flex;gap:4px}
-.stars svg{width:34px;height:28px;fill:rgba(30,27,75,.22)}
+.stars svg{width:34px;height:28px;fill:rgba(11,20,55,.2)}
 .stars svg.on{fill:var(--gold);filter:drop-shadow(2px 2px 0 var(--ink))}
 .stars.xl svg{width:62px;height:51px}
-.hud{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:8px}
-.hint{background:var(--ink);color:#fff;padding:4px 10px;margin:0}
-#pfbolts{background:var(--yel);color:var(--ink);white-space:nowrap}
-.pfwrap{border:4px solid var(--ink);box-shadow:6px 6px 0 var(--sh);background:#9BD8FF;line-height:0;margin:0 auto;min-width:min(100%,300px)}
-#pf{width:100%;height:auto;image-rendering:pixelated;image-rendering:crisp-edges;display:block}
-.pads{display:flex;justify-content:space-between;gap:12px;margin:14px auto 4px;max-width:720px;user-select:none;-webkit-user-select:none}
-.pads div{display:flex;gap:12px}
-.pads button{width:76px;height:68px;border:4px solid var(--ink);background:#fff;box-shadow:0 6px 0 var(--ink);display:grid;place-items:center;cursor:pointer;touch-action:none;-webkit-touch-callout:none;font-weight:700;font-size:1.2rem}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:0 auto 8px;height:2.5em}
+.hint{background:var(--navy);color:#fff;padding:3px 10px;margin:0;line-height:1.1}
+#gscore{background:var(--yel);color:var(--ink);white-space:nowrap}
+#gscore:empty,#ghint:empty{visibility:hidden}
+.gwrap{border:4px solid var(--ink);box-shadow:6px 6px 0 var(--sh);background:var(--navy);line-height:0;margin:0 auto;max-width:min(100%,calc((100dvh - 262px) * .75));min-width:min(100%,240px)}
+#gc{width:100%;height:auto;image-rendering:pixelated;image-rendering:crisp-edges;display:block;touch-action:none;cursor:pointer}
+.turn{display:none;background:var(--yel);border:3px solid var(--ink);padding:2px 10px;margin:0 0 8px}
+@media(orientation:landscape) and (max-height:500px){.turn{display:block}}
+/* wide screens (a laptop or an iPad on its side): the game sits on the left at full height, the controls beside it */
+@media(min-width:700px) and (min-aspect-ratio:11/10){
+  .gamegrid{display:grid;grid-template-columns:auto minmax(260px,1fr);grid-template-rows:auto auto auto 1fr;column-gap:28px;align-items:start}
+  .gamegrid .gwrap{grid-column:1;grid-row:1/6;width:calc((100dvh - 130px) * .75);max-width:none;min-width:200px}
+  .gamegrid .chhead,.gamegrid .hud,.gamegrid .turn,.gamegrid .pads,.gamegrid .glinks{grid-column:2}
+  .gamegrid .hud{height:auto;min-height:2.5em;flex-wrap:wrap}
+  .gamegrid .pads{margin:18px 0 4px;max-width:420px}
+  .gamegrid .glinks{justify-content:flex-start}
+}
+.pads{display:flex;justify-content:space-between;gap:12px;margin:14px auto 4px;max-width:520px;min-height:68px;user-select:none;-webkit-user-select:none}
+.pads div{display:flex;gap:8px}
+.pads button{width:clamp(50px,15vw,72px);height:68px;border:4px solid var(--ink);background:#fff;box-shadow:0 6px 0 var(--ink);display:grid;place-items:center;cursor:pointer;touch-action:none;-webkit-touch-callout:none;font-size:1.25rem}
 .pads button.down{transform:translateY(6px);box-shadow:none;background:var(--yel)}
-.pads #pj{width:128px;background:var(--yel)}
+.pads button.act{width:auto;min-width:clamp(88px,26vw,128px);padding:0 12px;background:var(--yel)}
 .pads .ico{width:34px;height:34px;stroke-width:3.2}
-.pz{position:fixed;inset:0;overflow:auto;z-index:10;background:var(--sky)}
-.pz[hidden]{display:none}
-.pztag{background:var(--ink);color:#fff;padding:4px 10px;font-weight:600;white-space:nowrap}
 
-/* puzzles */
-.brief{background:#fff;border:4px solid var(--ink);border-left:12px solid var(--role);padding:10px 14px;margin-bottom:14px}
-.brief b{color:var(--role-d)}
-.msg{min-height:1.5em;font-weight:700;margin:10px 0}
-.msg.good{color:#14532D} .msg.bad{color:#7F1D1D}
-.stagecols{display:grid;gap:16px}
-@media(min-width:720px){.stagecols{grid-template-columns:minmax(0,420px) 1fr;align-items:start}}
-
-.botgrid{position:relative;display:grid;grid-template-columns:repeat(5,1fr);width:100%;max-width:min(420px,44vh);aspect-ratio:1;background:#fff;border:4px solid var(--ink);box-shadow:6px 6px 0 var(--sh);margin:0 auto}
-.botgrid .c{border:1px solid #CBD5E1;display:grid;place-items:center}
-.botgrid .c.wall{background:repeating-linear-gradient(45deg,#FDBA74 0 8px,#EA580C 8px 16px)}
-.botgrid .c.goal svg{width:64%;height:64%;stroke:#B91C1C;stroke-width:3;fill:none;stroke-linecap:square}
-.botgrid .c.goal{background:#FEE2E2}
-#bot{position:absolute;left:0;top:0;width:20%;height:20%;padding:2.5%;transition:transform .28s steps(4);pointer-events:none}
-#bot svg{width:100%;height:100%}
-.prog{display:flex;flex-wrap:wrap;gap:6px;min-height:56px;background:#fff;padding:8px;border:4px dashed var(--ink);align-items:center}
-.prog button{width:38px;height:38px;border:3px solid var(--ink);background:var(--role);color:#fff;display:grid;place-items:center;cursor:pointer;padding:0}
-.prog button.cur{background:var(--yel);color:var(--ink)}
-.prog .ico{width:20px;height:20px;stroke-width:3.2}
-.pad{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:12px 0 16px}
-.pad button{min-height:58px;border:4px solid var(--ink);background:#fff;box-shadow:0 5px 0 var(--ink);display:grid;place-items:center;cursor:pointer}
-.pad button:active{transform:translateY(5px);box-shadow:none}
-.pad .ico{width:30px;height:30px;stroke-width:3.2}
-
-.wgrid{display:grid;gap:5px;width:100%;margin:0 auto}
-.wgrid .end{aspect-ratio:1}
-.wgrid .end svg{width:100%;height:100%}
-.tile{aspect-ratio:1;border:4px solid var(--ink);background:#fff;padding:0;cursor:pointer;color:#94A3B8;overflow:hidden}
-.tile svg{width:100%;height:100%;transition:transform .16s steps(3);fill:none;stroke:currentColor;stroke-width:20;stroke-linecap:butt;stroke-linejoin:miter}
-.tile.on{color:#F59E0B;background:#FEF9C3}
-.prop.spin{animation:spin .6s steps(8) infinite;transform-origin:56px 50px}
-
-.opts{display:grid;gap:12px}
-@media(min-width:620px){.opts.three{grid-template-columns:repeat(3,1fr)}}
-.opt{text-align:left;background:#fff;border:4px solid var(--ink);box-shadow:0 5px 0 var(--ink);padding:10px 12px;cursor:pointer;min-height:56px}
-.opt b{display:block;font-size:1.12rem}
-.opt small{font-size:1rem;line-height:1.15;display:block}
-.opt svg.pic{width:100%;max-width:200px;margin:4px auto}
-.opt[aria-pressed=true]{background:var(--yel);transform:translateY(3px);box-shadow:0 2px 0 var(--ink)}
-.opt.right{background:#BBF7D0}
-.opt.wrong{background:#FECACA}
-.opt[disabled]{cursor:default}
-.pbar{display:grid;grid-template-columns:5em 1fr;align-items:center;gap:8px;font-size:1rem;font-weight:600;margin-top:4px}
-.pbar i{display:block;height:12px;background:#E2E8F0;border:2px solid var(--ink);position:relative}
-.pbar i::after{content:"";position:absolute;inset:0;width:var(--v);background:var(--role)}
-.seg{display:grid;gap:8px;margin-bottom:14px}
-.seg .opt{padding:8px;text-align:center}
-.seg .opt small{font-size:.95rem}
-
-.meter{margin-bottom:10px}
-.mrow{display:flex;justify-content:space-between;gap:8px;font-weight:700}
-.mrow small{font-weight:600}
-.mbar{height:18px;background:#E2E8F0;border:3px solid var(--ink);position:relative;margin-top:2px}
-.mbar i{position:absolute;inset:0 auto 0 0;background:var(--bad);max-width:100%;transition:width .3s steps(6)}
-.meter.ok .mbar i{background:#22C55E}
-.mbar u{position:absolute;top:-6px;bottom:-6px;width:4px;background:var(--ink);transform:translateX(-2px)}
-.meter .tag{font-size:1rem;padding:0 6px;background:#FECACA;color:#7F1D1D}
-.meter.ok .tag{background:#BBF7D0;color:#14532D}
-
-.engine{width:100%;max-width:460px;margin:0 auto 12px}
-.engine .z{fill:#fff;stroke:var(--ink);stroke-width:3;stroke-dasharray:6 5}
-.engine .z.in{fill:var(--role);stroke-dasharray:none}
-.engine text{font:400 28px "Jersey 15",sans-serif;fill:#475569;text-anchor:middle;dominant-baseline:central}
-.engine .z.in + text{fill:#fff}
-.opt.done{background:#E2E8F0;color:#475569;box-shadow:none;transform:translateY(5px)}
-.blades{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;max-width:420px;margin:0 auto}
-.blades button{background:#fff;border:4px solid var(--ink);padding:6px;cursor:pointer}
-.blades button.right{background:#BBF7D0}
-.blades button.wrong{background:#FECACA}
-.blades svg{width:100%}
-
-.eco{position:sticky;top:6px;z-index:2;padding:10px 12px}
-.eco .meter{margin-bottom:6px}
-.eco .msg{min-height:0;margin:6px 0}
-@media(min-width:720px){.eco{top:16px;padding:16px}}
-.srcs{display:grid;gap:10px}
-.src{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;background:#fff;border:4px solid var(--ink);padding:8px 10px}
-.src b{display:block;line-height:1.15}
-.src small{display:block;line-height:1.15;font-size:1rem}
-.src .nums{font-size:1rem;font-weight:700;color:var(--role-d)}
-.step{display:flex;align-items:center;gap:6px}
-.step button{width:48px;height:48px;border:4px solid var(--ink);background:var(--yel);font-size:1.6rem;font-weight:700;line-height:1;cursor:pointer;box-shadow:0 4px 0 var(--ink)}
-.step button:active{transform:translateY(4px);box-shadow:none}
-.step button[disabled]{background:#CBD5E1;border-color:#64748B;box-shadow:0 4px 0 #64748B;color:#475569;cursor:not-allowed}
-.step output{min-width:1.5em;text-align:center;font-weight:700;font-size:1.35rem}
-.fanbox{display:grid;place-items:center;background:#fff;border:4px solid var(--ink);box-shadow:6px 6px 0 var(--sh);padding:10px;margin-bottom:16px;aspect-ratio:1.9}
-@media(min-width:720px){.fanbox{aspect-ratio:1.4}}
-.fanbox svg{height:100%;max-width:100%}
-.fan.spin{animation:spin 1.1s steps(12) infinite;transform-origin:0 0}
-
-/* result + explore */
 .result{text-align:center;display:flex;flex-direction:column;align-items:center;gap:10px}
-.result .avw{width:min(46vw,190px);background:#fff}
-.badge{background:var(--yel);border:4px solid var(--ink);padding:2px 16px;font-weight:700;margin-top:-26px;position:relative;box-shadow:0 4px 0 var(--ink)}
-.result .next{text-align:left;max-width:34em;width:100%}
+.result .avw{width:min(44vw,180px);background:#fff}
+.badge{background:var(--role);color:#fff;border:4px solid var(--ink);padding:2px 16px;margin-top:-26px;position:relative;box-shadow:0 4px 0 var(--ink)}
+.result .next{text-align:left;max-width:30em;width:100%}
 .result .next p{margin:0 0 8px}
 .result .next p:last-child{margin:0}
+.ask{background:var(--navy);color:#fff;border:4px solid var(--ink);padding:12px 14px;max-width:30em;width:100%}
+.ask .row{justify-content:center;margin-top:8px}
+.ask .btn{font-size:1.05rem;min-height:50px;padding:6px 14px}
 .roles{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:14px 0 20px}
 @media(min-width:620px){.roles{grid-template-columns:repeat(3,1fr)}}
-.roletile{background:var(--role);color:#fff;border:4px solid var(--ink);padding:14px 8px;box-shadow:0 6px 0 var(--ink);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;font-weight:700;line-height:1.15;min-height:124px;justify-content:center}
+.roletile{background:var(--role);color:#fff;border:4px solid var(--ink);padding:14px 8px;box-shadow:0 6px 0 var(--ink);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;line-height:1.05;min-height:124px;justify-content:center}
 .roletile .ico{width:38px;height:38px}
+.roletile small{font-size:.9rem;opacity:.95}
 .roletile .stars svg{width:24px;height:20px;fill:rgba(255,255,255,.35);filter:none}
 .roletile .stars svg.on{fill:#FDE047}
 .roletile:active{transform:translateY(6px);box-shadow:none}
+table.tally{border-collapse:collapse;width:100%;max-width:520px;background:#fff;border:4px solid var(--ink);margin-bottom:16px}
+table.tally td,table.tally th{border:2px solid var(--ink);padding:6px 10px;text-align:left;font-weight:400}
+table.tally td:last-child{text-align:right}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 </style>
 </head>
 <body>
+<div class="band" aria-hidden="true"></div>
 <div class="wrap" id="app"></div>
 <noscript><p style="padding:20px">This game needs JavaScript switched on.</p></noscript>
-<script>
-'use strict';
-const GAME_NAME = 'Engineer Me';
-const $ = (s, el = document) => el.querySelector(s);
-const $$ = (s, el = document) => [...el.querySelectorAll(s)];
-const app = $('#app');
-const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const sleep = ms => new Promise(r => setTimeout(r, ms));
-const rnd = n => Math.floor(Math.random() * n);
-const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = rnd(i + 1); [a[i], a[j]] = [a[j], a[i]]; } return a; };
-
-/* ---------- icons ---------- */
-const IC = {
-  bulb:'<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3z"/>',
-  hammer:'<path d="M13.5 4.5l6 6-3 3-6-6zM12 9l-8.5 8.5 3 3L15 12"/>',
-  pencil:'<path d="M4 20l1-4.5L16 4.5l3.5 3.5L8.5 19 4 20zM13.5 7l3.5 3.5"/>',
-  maths:'<path d="M4.5 7.5h6M7.5 4.5v6M14 7.5h6M5 14.5l5 5M10 14.5l-5 5M14 15.5h6M14 19h6"/>',
-  code:'<path d="M8 7l-5 5 5 5M16 7l5 5-5 5M13.5 5l-3 14"/>',
-  cog:'<circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="6.5"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/>',
-  leaf:'<path d="M5 19C5 10 10 5 20 4.5 20 14 15 19.5 6.5 19.5M5 20l8-8.5"/>',
-  team:'<circle cx="8.5" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M2.5 20c0-3.5 2.7-6 6-6s6 2.5 6 6M16 14.5c3-.3 5.5 1.8 5.5 5.5"/>',
-  search:'<circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l6 6"/>',
-  why:'<circle cx="12" cy="12" r="9.5"/><path d="M9.2 9.5a2.9 2.9 0 1 1 4.4 2.5c-1 .6-1.6 1.2-1.6 2.5M12 17.6v.01"/>',
-  talk:'<path d="M4 5h16v11H10.5L6 20v-4H4z"/>',
-  flag:'<path d="M5 21V4M5 4.5h13l-3 4 3 4H5"/>',
-  hex:'<path d="M12 2.5l8.2 4.7v9.6L12 21.5l-8.2-4.7V7.2z"/><circle cx="12" cy="12" r="2.8"/>',
-  bolt:'<path d="M13 2.5L4.5 13.5H11L10 21.5l8.5-11.5H12.5z"/>',
-  arrow:'<path d="M12 20V5M5.5 11.5L12 5l6.5 6.5"/>',
-  back:'<path d="M19 12H5M11.5 5.5L5 12l6.5 6.5"/>',
-  undo:'<path d="M4 9h10a5.5 5.5 0 0 1 0 11H8M4 9l4.5-4.5M4 9l4.5 4.5"/>',
-  play:'<path d="M7 4.5v15l12-7.5z"/>',
-  check:'<path d="M4.5 12.5l5 5 10-11"/>',
-  glasses:'<circle cx="7" cy="13.5" r="4"/><circle cx="17" cy="13.5" r="4"/><path d="M11 13.5h2M3 13l1.5-6M21 13l-1.5-6"/>',
-  school:'<path d="M2.5 9L12 4.5 21.5 9 12 13.5zM6.5 11.5v5c3 2.5 8 2.5 11 0v-5"/>',
-  factory:'<path d="M3 20.5V10l6 4v-4l6 4V5h5v15.5z"/>',
-};
-const icon = (n, rot = 0) => `<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"${rot ? ` style="transform:rotate(${rot}deg)"` : ''}>${IC[n]}</svg>`;
-
-/* ---------- content ---------- */
-const SKILLS = [
-  {id:'solve', n:'Solving puzzles', i:'bulb'},
-  {id:'build', n:'Building things', i:'hammer'},
-  {id:'draw', n:'Drawing and designing', i:'pencil'},
-  {id:'maths', n:'Maths and numbers', i:'maths'},
-  {id:'code', n:'Computers and coding', i:'code'},
-  {id:'apart', n:'Finding out how things work', i:'cog'},
-  {id:'nature', n:'Caring for the planet', i:'leaf'},
-  {id:'team', n:'Working in a team', i:'team'},
-  {id:'detail', n:'Spotting tiny details', i:'search'},
-  {id:'why', n:'Asking “why?”', i:'why'},
-  {id:'talk', n:'Explaining my ideas', i:'talk'},
-  {id:'grit', n:'Never giving up', i:'flag'},
-];
-const SKILL = Object.fromEntries(SKILLS.map(s => [s.id, s]));
-
-const ROLES = {
-  design: {
-    n:'Design Engineer', i:'pencil', c:'#4338CA', cd:'#312E81',
-    tag:'You dream it up, then make it real.',
-    w:{draw:3, maths:2, talk:2, build:1, solve:1},
-    does:'Design engineers turn ideas into real things. They sketch, build 3D models on a computer and work out the best shape for every part.',
-    rr:'At Rolls-Royce, design engineers shape the giant fan at the front of a jet engine. The fan on the UltraFan test engine is 140 inches across, which is about 3.6 metres. That is taller than a basketball hoop!',
-    planet:'A smarter shape means an engine burns less fuel, and less fuel means less pollution. UltraFan is designed to be 25% more fuel-efficient than the first Trent engines.',
-    subjects:'Design and Technology, Maths, Art, Physics',
-    lvl:'the Design Studio',
-    try:'Sketch an invention, then build a model of it from card or LEGO.',
-  },
-  software: {
-    n:'Software Engineer', i:'code', c:'#7E22CE', cd:'#581C87',
-    tag:'You tell machines what to do.',
-    w:{code:3, solve:2, grit:2, maths:1, detail:1},
-    does:'Software engineers write the code that tells machines what to do. When something goes wrong they hunt down the bug and fix it.',
-    rr:'A jet engine is full of sensors and computers. Software engineers at Rolls-Royce write the code that controls the engine and checks it is healthy while the plane is flying.',
-    planet:'Clever code helps an engine use just the right amount of fuel. It also spots problems early, so parts last longer and less is thrown away.',
-    subjects:'Computer Science, Maths, Physics',
-    lvl:'the Code Lab',
-    try:'Make a game in Scratch, or learn some Python.',
-  },
-  materials: {
-    n:'Materials Engineer', i:'hex', c:'#BE185D', cd:'#831843',
-    tag:'You choose what things are made of.',
-    w:{why:3, detail:2, apart:2, maths:1, nature:1},
-    does:'Materials engineers choose, and sometimes invent, what things are made of. Should it be light? Bendy? Able to survive fire?',
-    rr:'Deep inside a jet engine, the gas rushing past the turbine blades is hotter than the melting point of the metal. Materials engineers at Rolls-Royce use special metals, coatings and tiny cooling holes so the blades survive.',
-    planet:'Lighter, tougher materials mean engines burn less fuel. Parts that last longer or can be recycled mean less waste.',
-    subjects:'Chemistry, Physics, Maths',
-    lvl:'the Materials Lab',
-    try:'Test things at home. Which paper bridge holds the most coins?',
-  },
-  manufacturing: {
-    n:'Manufacturing Engineer', i:'factory', c:'#C2410C', cd:'#7C2D12',
-    tag:'You work out how to build it.',
-    w:{build:3, team:2, grit:1, detail:1, apart:1, talk:1},
-    does:'Manufacturing engineers work out how to actually build things: which machines, robots and people do what, and in what order, so every part comes out right.',
-    rr:'A big jet engine has many thousands of parts. Manufacturing engineers at Rolls-Royce plan how each one is made, checked and fitted together.',
-    planet:'Good manufacturing wastes less metal and uses less energy. 3D printing a part uses only the material it needs.',
-    subjects:'Design and Technology, Maths, Physics',
-    lvl:'the Factory',
-    try:'Take apart an old pen or toy, then put it back together.',
-  },
-  electrical: {
-    n:'Electrical Engineer', i:'bolt', c:'#0369A1', cd:'#0C4A6E',
-    tag:'You bring machines to life.',
-    w:{apart:3, solve:2, maths:2, code:1, build:1},
-    does:'Electrical engineers design the circuits, motors, batteries and wiring that bring machines to life.',
-    rr:'Rolls-Royce built an all-electric plane called Spirit of Innovation. In 2021 it set world speed records for electric aircraft, flying at 345 miles per hour.',
-    planet:'Electric motors make no fumes while they run. Electrical engineers are also needed for wind farms, batteries and chargers.',
-    subjects:'Physics, Maths, Computer Science, Design and Technology',
-    lvl:'the Power Lab',
-    try:'Build a circuit with a battery and a bulb, or try a micro:bit.',
-  },
-  sustainability: {
-    n:'Sustainability Engineer', i:'leaf', c:'#15803D', cd:'#14532D',
-    tag:'You power the world without hurting it.',
-    w:{nature:3, team:2, talk:2, why:1, grit:1},
-    does:'Sustainability engineers work out how to give people the power and travel they need without harming the planet.',
-    rr:'Rolls-Royce has run its jet engines on 100% sustainable aviation fuel, which can be made from things like used cooking oil. It is also designing small nuclear power stations that make low-carbon electricity.',
-    planet:'This whole job is about the planet. The UK is aiming for “net zero” and could need up to 725,000 people in new green jobs to get there.',
-    subjects:'Science, Geography, Maths',
-    lvl:'the Green Zone',
-    try:'Work out what uses the most energy at home or school, and how to cut it.',
-  },
-};
-const ROLE_IDS = Object.keys(ROLES);
-
-function match(picks) {
-  const score = id => picks.reduce((t, p) => t + (ROLES[id].w[p] || 0), 0);
-  return ROLE_IDS.slice().sort((a, b) => {
-    if (score(b) !== score(a)) return score(b) - score(a);
-    for (const p of picks) { const d = (ROLES[b].w[p] || 0) - (ROLES[a].w[p] || 0); if (d) return d; }
-    return 0;
-  });
-}
-
-/* ---------- stars ---------- */
-const STAR_ROWS = ['.....#.....', '....###....', '....###....', '###########', '.#########.', '..#######..', '..#######..', '.####.####.', '.##.....##.'];
-const STAR = STAR_ROWS.map((row, y) => [...row.matchAll(/#+/g)].map(m => `<rect x="${m.index}" y="${y}" width="${m[0].length}" height="1"/>`).join('')).join('');
-const stars = (n, cls = '') => `<span class="stars ${cls}" role="img" aria-label="${n} out of 3 stars">${[0,1,2].map(i => `<svg viewBox="0 0 11 9" shape-rendering="crispEdges" class="${i < n ? 'on' : ''}" aria-hidden="true">${STAR}</svg>`).join('')}</span>`;
-
-/* ---------- block character ---------- */
-const SKIN = ['#F8D9BF','#EBBE98','#D4A074','#B37C52','#8B5A3C','#5C3A26'];
-const COLS = [['Black','#1C1917'],['Dark brown','#4A2C17'],['Brown','#8A5A2B'],['Blonde','#E0B354'],['Ginger','#C2531A'],['Grey','#9AA3AF'],['Blue','#2563EB'],['Pink','#DB2777'],['Purple','#7C3AED'],['Teal','#0F766E']];
-const HAIR = [['short','Short'],['curly','Curly'],['long','Long'],['bun','Bun'],['braids','Braids'],['buzz','Very short'],['hijab','Hijab'],['turban','Turban']];
-
-// The character is a list of rectangles on a 16 x 27 grid, so the same drawing works as SVG and on the game canvas.
-function spriteRects(av, outfit, frame = 0) {
-  const sk = SKIN[av.skin], hc = COLS[av.col][1], h = av.hair, R = [], r = (x, y, w, hh, c) => R.push([x, y, w, hh, c]);
-  const dk = 'rgba(0,0,0,.22)', a = frame === 1 ? 1.5 : 0, b = frame === 2 ? 1.5 : 0;
-  r(4.5, 20, 3, 5.5 - a, '#1E293B'); r(8.5, 20, 3, 5.5 - b, '#1E293B'); r(4, 25.5 - a, 3.5, 1.5, '#0F172A'); r(8.5, 25.5 - b, 3.5, 1.5, '#0F172A');
-  if (h === 'long') { r(2.5, 3.5, 1.5, 12, hc); r(12, 3.5, 1.5, 12, hc); }
-  r(2, 12, 2, 3.5, outfit); r(12, 12, 2, 3.5, outfit); r(2, 15.5, 2, 3, sk); r(12, 15.5, 2, 3, sk);
-  r(4, 12, 8, 8, outfit); r(7, 12, 2, 1, sk); r(9, 14.5, 2, 1.5, '#fff'); r(4, 19, 8, 1, dk);
-  if (h !== 'hijab') { r(3.5, 7.5, .5, 2, sk); r(12, 7.5, .5, 2, sk); }
-  r(4, 4, 8, 8, sk);
-  const cap = () => { r(3.5, 2.5, 9, 3, hc); r(3.5, 5.5, 1, 2, hc); r(11.5, 5.5, 1, 2, hc); };
-  if (h === 'short' || h === 'long') cap();
-  else if (h === 'curly') { r(2.5, 1, 11, 4.5, hc); r(2.5, 5.5, 1.5, 3.5, hc); r(12, 5.5, 1.5, 3.5, hc); r(3.5, 0, 2, 1, hc); r(7, 0, 2, 1, hc); r(10.5, 0, 2, 1, hc); }
-  else if (h === 'bun') { cap(); r(6.5, 0, 3, 2.5, hc); }
-  else if (h === 'braids') { cap(); for (let i = 0; i < 6; i++) { r(2.5, 5.5 + i * 2, 1.5, 1.5, hc); r(12, 5.5 + i * 2, 1.5, 1.5, hc); } r(2.5, 17.5, 1.5, 1, '#FACC15'); r(12, 17.5, 1.5, 1, '#FACC15'); }
-  else if (h === 'buzz') { r(4, 3.5, 8, 1.5, hc); r(4, 5, .5, 1.5, hc); r(11.5, 5, .5, 1.5, hc); }
-  else if (h === 'hijab') { r(3, 2.5, 10, 12, hc); r(5, 5.5, 6, 6.5, sk); r(5, 12, 6, .5, dk); }
-  else if (h === 'turban') { r(3, 1, 10, 4, hc); r(4, 0, 8, 1, hc); r(3, 4.25, 10, .75, dk); for (let i = 0; i < 4; i++) { r(3.5 + i, 1 + i * .75, 1.5, .5, dk); r(11 - i, 1 + i * .75, 1.5, .5, dk); } r(7.5, 3.5, 1, 1, 'rgba(255,255,255,.55)'); }
-  r(5.5, 7, 2, 2, '#fff'); r(8.5, 7, 2, 2, '#fff'); r(6.5, 7.5, 1, 1.5, '#1E1B4B'); r(9.5, 7.5, 1, 1.5, '#1E1B4B');
-  r(6, 10, 4, 1.5, '#1E1B4B'); r(6.5, 10.5, 3, .5, '#fff');
-  if (av.glasses) for (const x of [5, 8]) { r(x, 6.5, 3, .5, '#111827'); r(x, 9, 3, .5, '#111827'); r(x, 6.5, .5, 3, '#111827'); r(x + 2.5, 6.5, .5, 3, '#111827'); }
-  return R;
-}
-function avatar(av, outfit = '#4F46E5', label = '', crop = 'full') {
-  return `<svg viewBox="${crop === 'head' ? '1 0 14 14' : '-6.5 -1 29 29'}" shape-rendering="crispEdges" ${label ? `role="img" aria-label="${esc(label)}"` : 'aria-hidden="true"'}>${spriteRects(av, outfit).map(([x, y, w, h, c]) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${c}"/>`).join('')}</svg>`;
-}
-
-/* ---------- state ---------- */
-const fresh = () => ({screen:'start', av:{skin:2, hair:'short', col:1, glasses:false}, name:'', picks:[], ranked:[], role:null, explore:false, done:{}, last:0, ch:null, g:null, pf:null, pz:null});
-let S = fresh();
-const who = () => S.name.trim() ? esc(S.name.trim()) : 'You';
-const role = () => ROLES[S.role];
-
-function go(screen) { S.screen = screen; S.g = null; S.pf = null; S.pz = null; document.body.style.overflow = ''; render(); window.scrollTo(0, 0); const h = $('h1,h2', app); if (h) { h.tabIndex = -1; h.focus({preventScroll:true}); } }
-function render(keep) {
-  const fk = keep && document.activeElement && document.activeElement.getAttribute('data-f');
-  const r = role();
-  document.documentElement.style.setProperty('--role', r ? r.c : '#4F46E5');
-  document.documentElement.style.setProperty('--role-d', r ? r.cd : '#3730A3');
-  app.innerHTML = (S.screen === 'start' ? '' : topbar()) + SCREENS[S.screen]();
-  if (AFTER[S.screen]) AFTER[S.screen]();
-  if (fk) { const el = $(`[data-f="${fk}"]`); if (el) el.focus({preventScroll:true}); }
-}
-const BACK = {look:'start', skills:'look', role:() => S.explore ? 'explore' : 'skills', challenge:'role', result:'role', explore:'result'};
-function topbar() {
-  const step = {look:1, skills:2, role:3, challenge:4, result:4, explore:4}[S.screen];
-  return `<header class="top"><button class="back" data-a="back" aria-label="Go back">${icon('back')}</button>
-<ol class="steps" aria-label="Step ${step} of 4">${[1,2,3,4].map(i => `<li class="${i <= step ? 'on' : ''}"></li>`).join('')}</ol><span class="brand">${GAME_NAME}</span></header>`;
-}
-
-/* ---------- screens ---------- */
-const SCREENS = {}, AFTER = {};
-
-SCREENS.start = () => `<section class="hero">
-<div class="trio" aria-hidden="true">
-<div class="avw">${avatar({skin:4, hair:'curly', col:0}, '#C2410C')}</div>
-<div class="avw">${avatar({skin:1, hair:'hijab', col:9}, '#7E22CE')}</div>
-<div class="avw">${avatar({skin:2, hair:'short', col:1, glasses:true}, '#15803D')}</div></div>
-<h1>What kind of engineer could you be?</h1>
-<p class="lead">Make your character, pick 3 things you are good at, then run, jump and solve puzzles like a real engineer.</p>
-<button class="btn big" data-a="go" data-to="look">${icon('play')} Start</button>
-<p class="fact"><b>Did you know?</b> Nearly 1 in 5 jobs in the UK are in engineering and technology.</p>
-<p class="tiny">${GAME_NAME} · made for the Future Makers Challenge</p></section>`;
-
-SCREENS.look = () => {
-  const a = S.av;
-  return `<h2>Make your character</h2><p>Engineers look like everyone. Make yours look however you like.</p>
-<div class="look"><div class="me"><div class="avw">${avatar(a, '#4F46E5', 'Your character')}</div>
-<div class="field"><label for="nm">Name or nickname (if you want)</label><input id="nm" maxlength="14" autocomplete="off" value="${esc(S.name)}" placeholder="Type here"></div></div>
-<div><div class="grp"><h3 id="g1">Skin</h3><div class="sw" role="group" aria-labelledby="g1">${SKIN.map((c, i) => `<button style="background:${c}" data-a="av" data-k="skin" data-v="${i}" data-f="sk${i}" aria-pressed="${a.skin === i}" aria-label="Skin tone ${i + 1}"></button>`).join('')}</div></div>
-<div class="grp"><h3 id="g2">Hair or headwear</h3><div class="styles" role="group" aria-labelledby="g2">${HAIR.map(([id, n]) => `<button data-a="av" data-k="hair" data-v="${id}" data-f="h${id}" aria-pressed="${a.hair === id}"><div class="avw">${avatar({...a, hair:id, glasses:false}, '#4F46E5', '', 'head')}</div>${n}</button>`).join('')}</div></div>
-<div class="grp"><h3 id="g3">Colour</h3><div class="sw" role="group" aria-labelledby="g3">${COLS.map(([n, c], i) => `<button style="background:${c}" data-a="av" data-k="col" data-v="${i}" data-f="c${i}" aria-pressed="${a.col === i}" aria-label="${n}"></button>`).join('')}</div></div>
-<div class="grp"><button class="tog" data-a="av" data-k="glasses" data-f="gl" aria-pressed="${a.glasses}">${icon('glasses')} Glasses</button></div>
-<button class="btn wide" data-a="go" data-to="skills">Next: pick your skills</button></div></div>`;
-};
-AFTER.look = () => { $('#nm').addEventListener('input', e => { S.name = e.target.value; }); };
-
-SCREENS.skills = () => {
-  const full = S.picks.length === 3;
-  return `<h2>Pick 3 things you are good at</h2><p>Or 3 things you enjoy. There are no wrong answers.</p>
-<div class="skills">${SKILLS.map(s => { const on = S.picks.includes(s.id); return `<button class="skill ${full && !on ? 'dim' : ''}" data-a="pick" data-id="${s.id}" data-f="s${s.id}" aria-pressed="${on}">${icon(s.i)}<span>${s.n}</span></button>`; }).join('')}</div>
-<div class="bar"><span class="count" role="status">${S.picks.length} of 3 picked</span><button class="btn" data-a="match" ${full ? '' : 'disabled'}>Find my engineer</button></div>`;
-};
-
-SCREENS.role = () => {
-  const r = role(), why = S.picks.filter(p => r.w[p]), mine = !S.explore;
-  return `<section class="pop"><div class="rolehead"><div class="avw">${avatar(S.av, r.cd, 'Your character as ' + r.n, 'head')}</div>
-<div><p class="kick">${mine ? who() + ' could be ' + (/^[AEIOU]/.test(r.n) ? 'an' : 'a') : 'Meet the'}</p><h2>${r.n}</h2><p>${r.tag}</p></div></div>
-${mine && why.length ? `<h3>Why it fits you</h3><ul class="chips">${why.map(p => `<li>${icon(SKILL[p].i)}${SKILL[p].n}</li>`).join('')}</ul>` : ''}
-<div class="info">
-<div class="card"><h3>${icon(r.i)} What you would do</h3><p>${r.does}</p></div>
-<div class="card"><h3>${icon('cog')} At Rolls-Royce</h3><p>${r.rr}</p></div>
-<div class="card green"><h3>${icon('leaf')} Helping the planet</h3><p>${r.planet}</p></div>
-</div>
-<p><b>Now find out if it suits you.</b> Run through ${r.lvl}, solve 2 puzzles and reach the flag.</p>
-<div class="row"><button class="btn role big" data-a="play">${icon('play')} Play the level</button></div></section>`;
-};
-
-SCREENS.challenge = () => `<div class="chhead"><h2>${role().lvl.replace(/^the /, 'The ')}</h2><span id="chstars">${stars(0)}</span></div>
-<div class="hud"><p class="hint" id="pfhint" role="status">Run to the first puzzle screen.</p><p class="hint" id="pfbolts">Bolts 0/29</p></div>
-<div class="pfwrap"><canvas id="pf" width="576" height="352" tabindex="0" aria-label="Platform game. Move with the arrow keys and jump with space, or use the buttons below."></canvas></div>
-<div class="pads"><div><button id="pl" aria-label="Move left">${icon('arrow', 270)}</button><button id="pr" aria-label="Move right">${icon('arrow', 90)}</button></div><button id="pj">JUMP</button></div>
-<div class="row center"><button class="link" data-a="pfAuto">Play without jumping</button><button class="link" data-a="finish">Skip to the end</button></div>
-<div class="pz" id="pz" hidden><div class="wrap"><div class="chhead"><h2 id="pztitle"></h2><span class="pztag" id="pztag"></span></div><div id="stage"></div><div id="pzend"></div>
-<div class="row center"><button class="link" data-a="pzSkip" id="pzskip">Skip this puzzle</button></div></div></div>`;
-AFTER.challenge = () => { S.ch = {stars:0}; pfStart(); };
-
-const VERDICT = [
-  ['You had a look around', 'You skipped this one, so it is hard to say yet. Have a proper go, or try a different engineer.'],
-  ['You have made a start', 'The puzzles were tricky this time. Engineers get better by practising, so have another go, or try a different engineer. One of them might suit you even better.'],
-  ['Yes, you would be good at this', 'You solved one of the puzzles like a real {r}. With practice you could be great at this.'],
-  ['Yes! You would make a brilliant {r}', 'You solved both puzzles first time. That is exactly the kind of thinking this job needs.'],
-];
-SCREENS.result = () => {
-  const r = role(), n = S.last, v = VERDICT[n].map(t => t.replace('{r}', r.n.toLowerCase()));
-  return `<section class="result pop"><div class="avw">${avatar(S.av, r.cd, 'Your character')}</div><div class="badge">${r.n}</div>
-${stars(n, 'xl')}<h2>${v[0]}${who() === 'You' ? '' : ', ' + who()}!</h2>
-<p style="max-width:30em">${v[1]}</p>
-<div class="card next"><h3>${icon('flag')} Your next steps</h3>
-<p><b>Try this now:</b> ${r.try}</p>
-<p><b>At school:</b> enjoy ${r.subjects}.</p>
-<p><b>After school:</b> an apprenticeship, where you are paid while you learn, or university. Both lead to the same job.</p></div>
-<div class="row center"><button class="btn" data-a="go" data-to="explore">Try another engineer</button><button class="btn sec" data-a="play">Play this level again</button></div>
-<button class="link" data-a="reset">New player</button></section>`;
-};
-
-SCREENS.explore = () => `<h2>Six kinds of engineer</h2><p>Pick one to find out what they do and play their level.</p>
-<div class="roles">${ROLE_IDS.map(id => { const r = ROLES[id]; return `<button class="roletile" style="--role:${r.c};--role-d:${r.cd}" data-a="open" data-id="${id}">${icon(r.i)}<span>${r.n}</span>${stars(S.done[id] || 0)}</button>`; }).join('')}</div>
-<div class="row center"><button class="btn sec" data-a="reset">New player</button></div>`;
-
-/* ---------- actions ---------- */
-const ACT = {
-  go: d => go(d.to),
-  back: () => { const b = BACK[S.screen]; go(typeof b === 'function' ? b() : b); },
-  av: d => { if (d.k === 'glasses') S.av.glasses = !S.av.glasses; else S.av[d.k] = d.k === 'hair' ? d.v : +d.v; render(true); },
-  pick: (d, el) => {
-    const i = S.picks.indexOf(d.id);
-    if (i >= 0) S.picks.splice(i, 1); else if (S.picks.length < 3) S.picks.push(d.id); else { el.classList.remove('shake'); void el.offsetWidth; el.classList.add('shake'); return; }
-    render(true);
-  },
-  match: () => { if (S.picks.length !== 3) return; S.ranked = match(S.picks); S.role = S.ranked[0]; S.explore = false; go('role'); },
-  play: () => go('challenge'),
-  open: d => { S.role = d.id; S.explore = true; go('role'); },
-  finish: () => { const n = S.ch ? S.ch.stars : 0; S.done[S.role] = Math.max(S.done[S.role] || 0, n); S.last = n; go('result'); },
-  reset: () => { S = fresh(); go('start'); },
-};
-app.addEventListener('click', e => { const b = e.target.closest('[data-a]'); if (b && !b.disabled && ACT[b.dataset.a]) ACT[b.dataset.a](b.dataset, b); });
-
-/* ---------- the platform level ---------- */
-const PFC = {T:32, VW:576, VH:352, W:20, H:50, RUN:175, JUMP:640, G:1900};
-function pfLevel() {
-  const W = 110, H = 11, g = Array.from({length:H}, () => Array(W).fill(' '));
-  for (const [a, b] of [[0,13],[16,33],[36,56],[59,62],[65,84],[87,109]]) for (let x = a; x <= b; x++) g[9][x] = g[10][x] = '#';
-  for (const [x, n] of [[19,1],[20,2],[21,2],[22,1],[79,1],[80,2],[81,1]]) for (let i = 0; i < n; i++) g[8 - i][x] = 'B';
-  for (const x of [50, 51, 52]) g[6][x] = 'B';
-  const bolts = [[4,7],[6,7],[8,7],[14.5,5],[17,7],[20,5],[21,5],[25,7],[28,5],[31,7],[34.5,5],[38,7],[40,7],[50,5],[51,5],[52,5],[57.5,5],[60,7],[61,7],[63.5,5],[67,7],[70,5],[72.5,7],[75,5],[80,4],[85.5,5],[89,7],[99,7],[101,7]];
-  return {W, H, g, start:1, term:[42, 92], gate:[46, 96], haz:[28, 70, 75], flag:104, bolts:bolts.map(([x, y]) => ({x:x * 32 + 16, y:y * 32 + 16, got:false}))};
-}
-function pfStart() {
-  const L = pfLevel(), cv = $('#pf'), feet = 9 * PFC.T - PFC.H;
-  const pf = S.pf = {L, ctx:cv.getContext('2d'), p:{x:L.start * PFC.T + 6, y:feet, vx:0, vy:0, ground:true, face:1, walk:0}, cam:0, in:{l:0, r:0, j:0, jp:0},
-    solved:[false, false], gateT:[0, 0], got:0, cp:[L.start * PFC.T + 6, feet], coy:0, jbuf:0, paused:false, done:false, auto:false, t:0, flash:0};
-  // phones get a closer view: 9 tiles square instead of 18 x 11
-  const near = cv.clientWidth < 500; cv.width = pf.vw = near ? 288 : 576; cv.height = near ? 288 : 352; pf.oy = 352 - cv.height; pf.ctx.imageSmoothingEnabled = false;
-  cv.parentNode.style.maxWidth = `calc((100dvh - 280px) * ${cv.width / cv.height})`;
-  for (const [id, k] of [['#pl', 'l'], ['#pr', 'r'], ['#pj', 'j']]) {
-    const el = $(id), off = () => { pf.in[k] = 0; el.classList.remove('down'); };
-    el.addEventListener('pointerdown', e => { e.preventDefault(); if (k === 'j' && !pf.in.j) pf.in.jp = 1; pf.in[k] = 1; el.classList.add('down'); try { el.setPointerCapture(e.pointerId); } catch (_) {} });
-    for (const n of ['pointerup', 'pointercancel', 'lostpointercapture']) el.addEventListener(n, off);
-    el.addEventListener('contextmenu', e => e.preventDefault());
-  }
-  let last = performance.now(), acc = 0;
-  const loop = ts => {
-    if (S.pf !== pf) return;
-    const dt = Math.min(.05, (ts - last) / 1000); last = ts;
-    if (!pf.paused) { acc += dt; while (acc >= 1 / 60) { pfStep(1 / 60); acc -= 1 / 60; } }
-    pfDraw(); requestAnimationFrame(loop);
-  };
-  pfDraw(); requestAnimationFrame(loop);
-}
-const KEYS = {ArrowLeft:'l', a:'l', A:'l', ArrowRight:'r', d:'r', D:'r', ArrowUp:'j', w:'j', W:'j', ' ':'j'};
-addEventListener('keydown', e => {
-  const pf = S.pf, k = KEYS[e.key]; if (!pf || pf.paused || !k) return;
-  e.preventDefault();
-  if (document.activeElement && document.activeElement.tagName === 'BUTTON') $('#pf').focus({preventScroll:true});
-  if (k === 'j' && !pf.in.j) pf.in.jp = 1; pf.in[k] = 1;
-});
-addEventListener('keyup', e => { const pf = S.pf, k = KEYS[e.key]; if (pf && k) pf.in[k] = 0; });
-
-function pfSolid(tx, ty) {
-  const pf = S.pf, L = pf.L;
-  if (tx < 0 || tx >= L.W) return true;
-  if (ty < 0 || ty >= L.H) return false;
-  for (let i = 0; i < 2; i++) if (tx === L.gate[i] && ty <= 8 && !pf.solved[i]) return true;
-  const c = L.g[ty][tx]; return c === '#' || c === 'B';
-}
-function pfStep(dt) {
-  const pf = S.pf, p = pf.p, C = PFC, T = C.T, L = pf.L, inp = pf.in; pf.t += dt; pf.flash = Math.max(0, pf.flash - dt);
-  for (let i = 0; i < 2; i++) if (pf.solved[i] && pf.gateT[i] < 1) pf.gateT[i] = Math.min(1, pf.gateT[i] + dt * 2.5);
-  if (pf.done) return;
-  const want = (inp.r ? 1 : 0) - (inp.l ? 1 : 0), acc = (p.ground ? 2200 : 1400) * dt;
-  p.vx += Math.max(-acc, Math.min(acc, want * C.RUN - p.vx)); if (want) p.face = want;
-  if (inp.jp) { pf.jbuf = .12; inp.jp = 0; } else pf.jbuf -= dt;
-  pf.coy = p.ground ? .1 : pf.coy - dt;
-  if (pf.jbuf > 0 && pf.coy > 0) { p.vy = -C.JUMP; pf.jbuf = 0; pf.coy = 0; p.ground = false; }
-  if (!inp.j && p.vy < -260) p.vy = -260;
-  p.vy = Math.min(900, p.vy + C.G * dt);
-  // sideways, then up and down, against the tile grid
-  p.x += p.vx * dt;
-  const rows = () => { const a = []; for (let y = Math.floor(p.y / T); y <= Math.floor((p.y + C.H - .01) / T); y++) a.push(y); return a; };
-  const cols = () => { const a = []; for (let x = Math.floor(p.x / T); x <= Math.floor((p.x + C.W - .01) / T); x++) a.push(x); return a; };
-  if (p.vx > 0) { const tx = Math.floor((p.x + C.W) / T); if (rows().some(y => pfSolid(tx, y))) { p.x = tx * T - C.W - .01; p.vx = 0; } }
-  else if (p.vx < 0) { const tx = Math.floor(p.x / T); if (rows().some(y => pfSolid(tx, y))) { p.x = (tx + 1) * T; p.vx = 0; } }
-  p.y += p.vy * dt; p.ground = false;
-  if (p.vy > 0) { const ty = Math.floor((p.y + C.H) / T); if (cols().some(x => pfSolid(x, ty))) { p.y = ty * T - C.H; p.vy = 0; p.ground = true; } }
-  else if (p.vy < 0) { const ty = Math.floor(p.y / T); if (cols().some(x => pfSolid(x, ty))) { p.y = (ty + 1) * T; p.vy = 0; } }
-  if (p.ground && Math.abs(p.vx) > 20) p.walk += dt * Math.abs(p.vx) / 22;
-  const over = tx => p.x + C.W > tx * T + 6 && p.x < tx * T + T - 6;
-  if (p.y > L.H * T + 60 || L.haz.some(tx => over(tx) && p.y + C.H > 8 * T + 12)) { p.x = pf.cp[0]; p.y = pf.cp[1]; p.vx = p.vy = 0; pf.flash = .7; }
-  for (const b of L.bolts) if (!b.got && Math.abs(b.x - (p.x + C.W / 2)) < 20 && Math.abs(b.y - (p.y + C.H / 2)) < 34) { b.got = true; $('#pfbolts').textContent = `Bolts ${++pf.got}/${L.bolts.length}`; }
-  for (let i = 0; i < 2; i++) if (!pf.solved[i] && over(L.term[i]) && p.y + C.H > 7 * T) { pf.cp = [L.term[i] * T + 6, 9 * T - C.H]; pzOpen(i); return; }
-  if (p.x + C.W > L.flag * T + 12) { pf.done = true; pfFlag(); }
-  const target = Math.max(0, Math.min(L.W * T - pf.vw, p.x + C.W / 2 - pf.vw * .4));
-  pf.cam += (target - pf.cam) * Math.min(1, dt * 8);
-}
-function pfFlag() {
-  const pf = S.pf; setStars(S.ch.stars + 1); $('#pfhint').textContent = 'Level complete!';
-  setTimeout(() => { if (S.pf === pf) ACT.finish(); }, 900);
-}
-const GLYPH = {q:['.###.', '#...#', '....#', '...#.', '..#..', '.....', '..#..'], ok:['.....', '....#', '...##', '#.##.', '###..', '.#...', '.....']};
-function pfDraw() {
-  const pf = S.pf, c = pf.ctx, C = PFC, T = C.T, L = pf.L, r = role(), cam = Math.round(pf.cam), p = pf.p;
-  c.setTransform(1, 0, 0, 1, 0, -pf.oy);
-  c.fillStyle = '#9BD8FF'; c.fillRect(0, 0, pf.vw, C.VH);
-  c.fillStyle = 'rgba(255,255,255,.85)';
-  for (let i = 0; i < 8; i++) { const x = Math.round(((i * 260 - cam * .3) % 2080 + 2080) % 2080 - 120), y = 84 + (i % 3) * 34; c.fillRect(x, y, 72, 14); c.fillRect(x + 16, y - 12, 36, 12); }
-  c.fillStyle = r.c + '30';
-  for (let i = 0; i < 26; i++) { const x = Math.round(i * 150 - cam * .55), h = 56 + (i * 53) % 84; if (x > -70 && x < pf.vw) { c.fillRect(x, 288 - h, 64, h); c.fillRect(x + 20, 288 - h - 14, 24, 14); } }
-  const x0 = Math.floor(cam / T);
-  for (let tx = x0; tx <= x0 + Math.ceil(pf.vw / T) && tx < L.W; tx++) for (let ty = 0; ty < L.H; ty++) {
-    const ch = L.g[ty][tx], px = tx * T - cam, py = ty * T;
-    if (ch === '#') { c.fillStyle = r.cd; c.fillRect(px, py, T, T); if (ty === 9) { c.fillStyle = r.c; c.fillRect(px, py, T, 10); c.fillStyle = 'rgba(255,255,255,.35)'; c.fillRect(px, py, T, 3); } c.fillStyle = 'rgba(0,0,0,.25)'; c.fillRect(px + 6, py + 16, 6, 6); c.fillRect(px + 20, py + 22, 6, 6); }
-    else if (ch === 'B') { c.fillStyle = '#1E1B4B'; c.fillRect(px, py, T, T); c.fillStyle = '#FCD34D'; c.fillRect(px + 3, py + 3, T - 6, T - 6); c.fillStyle = '#FEF3C7'; c.fillRect(px + 3, py + 3, T - 6, 4); c.fillStyle = '#D97706'; c.fillRect(px + 3, py + T - 7, T - 6, 4); }
-  }
-  for (const b of L.bolts) { const px = b.x - cam, py = b.y + (Math.floor(pf.t * 4 + b.x) % 2) * 2; if (b.got || px < -10 || px > pf.vw + 10) continue;
-    c.fillStyle = '#1E1B4B'; c.fillRect(px - 8, py - 8, 16, 16); c.fillStyle = '#FACC15'; c.fillRect(px - 5, py - 5, 10, 10); c.fillStyle = '#FEF3C7'; c.fillRect(px - 5, py - 5, 10, 3); c.fillStyle = '#B45309'; c.fillRect(px - 2, py - 1, 4, 4); }
-  for (const tx of L.haz) { const px = tx * T - cam, py = 8 * T; if (px < -T || px > pf.vw) continue;
-    for (let k = 0; k < 3; k++) { const sx = px + 1 + k * 10; c.fillStyle = '#EA580C'; c.fillRect(sx, py + 22, 10, 10); c.fillRect(sx + 2, py + 14, 6, 8); c.fillStyle = '#FDE047'; c.fillRect(sx + 4, py + 8 + (Math.floor(pf.t * 6 + k) % 2) * 2, 2, 6); } }
-  for (let i = 0; i < 2; i++) { const px = L.term[i] * T - cam, py = 8 * T, ok = pf.solved[i]; if (px < -T * 2 || px > pf.vw + T) continue;
-    c.fillStyle = '#475569'; c.fillRect(px + 12, py + 14, 8, 14); c.fillRect(px + 4, py + 28, 24, 4);
-    c.fillStyle = '#1E1B4B'; c.fillRect(px, py - 14, 32, 30); c.fillStyle = ok ? '#22C55E' : (Math.floor(pf.t * 2) % 2 ? '#22D3EE' : '#A5F3FC'); c.fillRect(px + 3, py - 11, 26, 24);
-    c.fillStyle = '#1E1B4B'; GLYPH[ok ? 'ok' : 'q'].forEach((row, y) => [...row].forEach((ch, x) => { if (ch === '#') c.fillRect(px + 9 + x * 3, py - 9 + y * 3, 3, 3); }));
-    if (!ok) { const by = py - 34 - Math.floor(pf.t * 3) % 2 * 4; c.fillStyle = '#FACC15'; c.fillRect(px + 8, by, 16, 6); c.fillRect(px + 11, by + 6, 10, 4); c.fillRect(px + 14, by + 10, 4, 4); } }
-  { const px = L.flag * T - cam, py = 9 * T; if (px > -60 && px < pf.vw + 10) { c.fillStyle = '#475569'; c.fillRect(px + 14, py - 150, 5, 150); c.fillStyle = '#1E1B4B'; c.fillRect(px + 6, py - 8, 21, 8); c.fillStyle = r.c; c.fillRect(px + 19, py - 150, 40, 28); c.fillStyle = '#FACC15'; c.fillRect(px + 27, py - 142, 12, 12); } }
-  for (let i = 0; i < 2; i++) { const px = L.gate[i] * T - cam, k = pf.gateT[i]; if (k >= 1 || px < -T || px > pf.vw) continue; const h = Math.round(9 * T * (1 - k));
-    for (let y = 0; y < h; y += 16) { c.fillStyle = (y / 16) % 2 ? '#1E1B4B' : '#FACC15'; c.fillRect(px + 4, y, T - 8, Math.min(16, h - y)); } c.fillStyle = '#1E1B4B'; c.fillRect(px, Math.max(0, h - 8), T, 8); }
-  if (!(pf.flash > 0 && Math.floor(pf.flash * 12) % 2)) {
-    const frame = !p.ground ? 1 : Math.abs(p.vx) > 20 ? 1 + Math.floor(p.walk) % 2 : 0, ox = Math.round(p.x) - 6 - cam, oy = Math.round(p.y) - 4;
-    for (const [x, y, w, h, col] of spriteRects(S.av, r.cd, frame)) { c.fillStyle = col; c.fillRect(ox + (p.face < 0 ? 16 - x - w : x) * 2, oy + y * 2, w * 2, h * 2); }
-  }
-}
-
-/* ---------- puzzle window ---------- */
-const stage = () => $('#stage');
-function setStars(n) { S.ch.stars = Math.max(0, Math.min(3, n)); const el = $('#chstars'); if (el) el.innerHTML = stars(S.ch.stars); }
-function say(text, kind = '') { const m = $('#msg'); if (m) { m.className = 'msg ' + kind; m.textContent = text; } }
-function pzOpen(i) {
-  const pf = S.pf, P = PUZ[S.role][i];
-  pf.paused = true; pf.in = {l:0, r:0, j:0, jp:0}; $$('.pads button').forEach(b => b.classList.remove('down'));
-  S.pz = {i, star:false, ended:false};
-  $('#pztitle').textContent = P.t; $('#pztag').textContent = `Puzzle ${i + 1} of 2`; $('#pzend').innerHTML = ''; $('#pzskip').hidden = false;
-  const el = $('#pz'); el.hidden = false; el.scrollTop = 0; document.body.style.overflow = 'hidden'; P.go();
-  const h = $('#pztitle'); h.tabIndex = -1; h.focus({preventScroll:true});
-}
-function pzEnd(star) {
-  S.pz.star = star; S.pz.ended = true; $('#pzskip').hidden = true;
-  $('#pzend').innerHTML = `<div class="row center"><span class="pztag">${star ? 'Star earned!' : 'Gate open, but no star this time'}</span><button class="btn role" data-a="pzDone">Back to the level</button></div>`;
-}
-function pzClose() {
-  const pf = S.pf, z = S.pz; if (!pf || !z) return;
-  if (z.star) setStars(S.ch.stars + 1);
-  pf.solved[z.i] = true; S.pz = null; S.g = null; $('#pz').hidden = true; stage().innerHTML = ''; document.body.style.overflow = '';
-  if (pf.auto) { if (z.i === 0) return pzOpen(1); pf.done = true; return pfFlag(); }
-  $('#pfhint').textContent = z.i === 0 ? 'Gate open! Find the next puzzle screen.' : 'Gate open! Run to the flag.';
-  pf.paused = false; $('#pf').focus({preventScroll:true});
-}
-ACT.pzDone = pzClose;
-ACT.pzSkip = () => { S.pz.star = false; pzClose(); };
-ACT.pfAuto = () => { const pf = S.pf; if (!pf || pf.done || pf.paused) return; pf.auto = true; pzOpen(pf.solved[0] ? 1 : 0); };
-
-function meter(label, val, max, target, mode) {
-  const ok = mode === 'min' ? val >= target : val <= target;
-  return `<div class="meter ${ok ? 'ok' : 'no'}"><div class="mrow"><span>${label}</span><span>${val} <small>(${mode === 'min' ? 'need ' + target + '+' : 'max ' + target})</small> <span class="tag">${ok ? 'OK' : 'Not yet'}</span></span></div>
-<div class="mbar"><i style="width:${Math.min(100, val / max * 100)}%"></i><u style="left:${target / max * 100}%"></u></div></div>`;
-}
-
-/* ---------- puzzle: one-tap choice (materials, shape, fuel) ---------- */
-const MAT = {
-  cf:{n:'Carbon fibre', s:5, l:5, h:2}, steel:{n:'Steel', s:5, l:1, h:4}, plastic:{n:'Plastic', s:1, l:5, h:1},
-  nickel:{n:'Nickel superalloy', s:5, l:2, h:5}, alu:{n:'Aluminium', s:3, l:4, h:2},
-};
-const matOpt = id => { const m = MAT[id], bar = (l, v) => `<span class="pbar"><span>${l}</span><i style="--v:${v * 20}%"></i></span>`;
-  return {id, label:`${m.n}: strength ${m.s} out of 5, lightness ${m.l} out of 5, heat-proof ${m.h} out of 5`, html:`<b>${m.n}</b>${bar('Strong', m.s)}${bar('Light', m.l)}${bar('Heat-proof', m.h)}`}; };
-const shape = d => `<svg class="pic" viewBox="0 0 120 60" aria-hidden="true"><path d="M4 14h22M4 30h16M4 46h22" stroke="#94A3B8" stroke-width="4"/><path d="${d}" fill="#4338CA" stroke="#1E1B4B" stroke-width="4"/></svg>`;
-const QUIZ = {
-  mat0:{q:'<b>Fan blade.</b> It sits at the cool front of the engine and spins incredibly fast. It must be <b>very strong</b> but <b>as light as possible</b>. Which material would you choose?', o:['steel','cf','plastic'].map(matOpt), a:'cf',
-    why:'Carbon fibre is as strong as steel here but far lighter, so the engine burns less fuel. Plastic would snap.'},
-  mat1:{q:'<b>Turbine blade.</b> It sits in gas that is <b>hotter than lava</b>. It must stay <b>strong in extreme heat</b>. Which material would you choose?', o:['alu','cf','nickel'].map(matOpt), a:'nickel',
-    why:'Nickel superalloy keeps its strength when it is glowing hot. Aluminium would melt and carbon fibre would burn.'},
-  shape:{q:'<b>Slip through the air.</b> A jet engine pushes through the air at hundreds of miles an hour. Which front shape lets the air slide past most easily?', a:'smooth',
-    o:[{id:'flat', html:shape('M44 12h62v36H44z') + '<b>Flat</b>'}, {id:'round', html:shape('M44 30a18 18 0 0 1 18-18h44v36H62a18 18 0 0 1-18-18z') + '<b>Round</b>'}, {id:'smooth', html:shape('M34 30C58 20 80 12 106 12v36C80 48 58 40 34 30z') + '<b>Pointed and smooth</b>'}],
-    why:'A smooth, pointed shape lets the air slide around it. Less drag means the engine burns less fuel.'},
-  fuel:{q:'<b>Cleaner fuel.</b> Sustainable aviation fuel is made from waste instead of new oil from under the ground. Which of these can it be made from?', a:'oil',
-    o:[{id:'coal', html:'<b>Coal</b><small>Dug out of the ground</small>'}, {id:'oil', html:'<b>Used cooking oil</b><small>Left over from frying food</small>'}, {id:'crude', html:'<b>Crude oil</b><small>Pumped from under the sea</small>'}],
-    why:'Used cooking oil is waste, so turning it into fuel means less new oil is needed. Rolls-Royce has tested its jet engines on 100% sustainable fuel.'},
-};
-function quizStart(R) { S.g = {R, picked:null}; quizDraw(); }
-function quizDraw() {
-  const g = S.g, R = g.R;
-  stage().innerHTML = `<div class="brief">${R.q}</div>
-<div class="opts three">${R.o.map(o => `<button class="opt ${g.picked ? (o.id === R.a ? 'right' : o.id === g.picked ? 'wrong' : '') : ''}" data-a="quizPick" data-id="${o.id}" ${g.picked ? 'disabled' : ''} ${o.label ? `aria-label="${o.label}"` : ''}>${o.html}</button>`).join('')}</div>
-<p class="msg ${g.picked ? (g.picked === R.a ? 'good' : 'bad') : ''}" id="msg" role="status">${g.picked ? (g.picked === R.a ? 'Correct! ' : 'Not quite. ') + R.why : ''}</p>`;
-}
-ACT.quizPick = d => { const g = S.g; if (g.picked) return; g.picked = d.id; quizDraw(); pzEnd(d.id === g.R.a); };
-
-/* ---------- puzzle: code the bot ---------- */
-const BOT_LEVELS = [
-  {map:['.....','.....','S.#.T','.....','.....'], max:8},
-  {map:['S.#..','.##..','....#','.#...','.#..T'], max:10},
-];
-const MOVES = {u:[0,-1,0,'up'], r:[1,0,90,'right'], d:[0,1,180,'down'], l:[-1,0,270,'left']};
-const BOTSVG = '<svg viewBox="0 0 40 40" shape-rendering="crispEdges"><rect x="18" y="2" width="4" height="8" fill="#581C87"/><rect x="16" y="0" width="8" height="5" fill="#F59E0B"/><rect x="5" y="9" width="30" height="26" fill="#7E22CE"/><rect x="10" y="15" width="20" height="11" fill="#fff"/><rect x="13" y="18" width="5" height="5" fill="#1E1B4B"/><rect x="22" y="18" width="5" height="5" fill="#1E1B4B"/></svg>';
-function botStart(lv) { S.g = {lv, prog:[], run:false, won:false}; botDraw(); }
-function botLevel() {
-  const L = BOT_LEVELS[S.g.lv], o = {max:L.max, walls:new Set()};
-  L.map.forEach((row, y) => [...row].forEach((ch, x) => { if (ch === '#') o.walls.add(x + ',' + y); if (ch === 'S') o.start = [x, y]; if (ch === 'T') o.goal = [x, y]; }));
-  return o;
-}
-function botDraw() {
-  const g = S.g, L = botLevel();
-  let cells = '';
-  for (let y = 0; y < 5; y++) for (let x = 0; x < 5; x++) {
-    const goal = L.goal[0] === x && L.goal[1] === y;
-    cells += `<div class="c ${L.walls.has(x + ',' + y) ? 'wall' : ''} ${goal ? 'goal' : ''}">${goal ? '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2l-4 7 6 3-5 5 3 5"/></svg>' : ''}</div>`;
-  }
-  stage().innerHTML = `<div class="brief">A tiny robot is inside the engine. Write code to drive it to the <b>crack</b> so it can take a photo. Do not touch the <b>hot parts</b> (orange stripes).</div>
-<div class="stagecols"><div class="botgrid" role="img" aria-label="Engine map">${cells}<div id="bot" style="transform:translate(${L.start[0] * 100}%,${L.start[1] * 100}%)">${BOTSVG}</div></div>
-<div><h3>Your code <span id="cnt"></span></h3><div class="prog" id="prog"></div>
-<div class="pad">${['l','u','d','r'].map(k => `<button data-a="botAdd" data-k="${k}" aria-label="Add move ${MOVES[k][3]}">${icon('arrow', MOVES[k][2])}</button>`).join('')}</div>
-<div class="row"><button class="btn sec" data-a="botUndo">${icon('undo')} Undo</button><button class="btn role" data-a="botRun">${icon('play')} Run code</button></div>
-<p class="msg" id="msg" role="status"></p></div></div>`;
-  botProg();
-}
-function botProg(cur = -1) {
-  const g = S.g, L = BOT_LEVELS[g.lv];
-  $('#cnt').textContent = `(${g.prog.length} of ${L.max} steps)`;
-  $('#prog').innerHTML = g.prog.length ? g.prog.map((k, i) => `<button class="${i === cur ? 'cur' : ''}" data-a="botDel" data-i="${i}" aria-label="Step ${i + 1}: ${MOVES[k][3]}. Tap to remove">${icon('arrow', MOVES[k][2])}</button>`).join('') : '<span>Tap the arrows to add steps</span>';
-}
-ACT.botAdd = d => { const g = S.g; if (g.run || g.won) return; if (g.prog.length >= BOT_LEVELS[g.lv].max) return say('That is the most steps this bot can remember. Can you find a shorter way?', 'bad'); g.prog.push(d.k); botProg(); };
-ACT.botUndo = () => { const g = S.g; if (g.run || g.won) return; g.prog.pop(); botProg(); };
-ACT.botDel = d => { const g = S.g; if (g.run || g.won) return; g.prog.splice(+d.i, 1); botProg(); };
-ACT.botRun = async () => {
-  const g = S.g; if (g.run || g.won) return;
-  if (!g.prog.length) return say('Add some steps first.', 'bad');
-  g.run = true; say('Running…');
-  const L = botLevel(), bot = $('#bot'); let [x, y] = L.start, fail = '';
-  for (let i = 0; i < g.prog.length; i++) {
-    if (S.g !== g) return;
-    botProg(i);
-    const [dx, dy] = MOVES[g.prog[i]], nx = x + dx, ny = y + dy;
-    if (nx < 0 || ny < 0 || nx > 4 || ny > 4 || L.walls.has(nx + ',' + ny)) { fail = `Bump! Step ${i + 1} hit ${L.walls.has(nx + ',' + ny) ? 'a hot part' : 'the wall'}. Every coder gets bugs. Change your code and run it again.`; break; }
-    x = nx; y = ny; bot.style.transform = `translate(${x * 100}%,${y * 100}%)`;
-    await sleep(330);
-    if (x === L.goal[0] && y === L.goal[1]) break;
-  }
-  if (S.g !== g) return;
-  if (!fail && x === L.goal[0] && y === L.goal[1]) { g.won = true; g.run = false; say('Photo taken! Your code worked.', 'good'); return pzEnd(true); }
-  if (!fail) fail = 'The bot stopped before it reached the crack. Add more steps and run it again.';
-  bot.classList.add('shake'); say(fail, 'bad');
-  await sleep(700);
-  if (S.g !== g) return;
-  bot.classList.remove('shake'); bot.style.transform = `translate(${L.start[0] * 100}%,${L.start[1] * 100}%)`; g.run = false; botProg();
-};
-
-/* ---------- puzzle: connect the wires ---------- */
-const WIRE_LEVELS = [
-  {w:3, h:3, path:[[0,0],[1,0],[1,1],[1,2],[2,2]]},
-  {w:4, h:4, path:[[0,3],[1,3],[1,2],[1,1],[2,1],[3,1],[3,0]]},
-];
-const DIRS = [[0,-1,1,4],[1,0,2,8],[0,1,4,1],[-1,0,8,2]]; // dx, dy, this side, neighbour's side
-const turn = (m, n) => { for (let i = 0; i < n % 4; i++) m = ((m << 1) & 15) | (m >> 3); return m; };
-const bitTo = (a, b) => DIRS.find(d => a[0] + d[0] === b[0] && a[1] + d[1] === b[1])[2];
-function wireStart(lv) {
-  const L = WIRE_LEVELS[lv], g = S.g = {L, won:false};
-  do {
-    g.t = Array.from({length:L.h}, () => Array.from({length:L.w}, () => ({base:rnd(3) ? 3 : 5, r:rnd(4), need:0})));
-    L.path.forEach((p, i) => {
-      const need = (i ? bitTo(p, L.path[i - 1]) : 8) | (i < L.path.length - 1 ? bitTo(p, L.path[i + 1]) : 2);
-      g.t[p[1]][p[0]] = {base:need === 5 || need === 10 ? 5 : 3, r:rnd(4), need};
-    });
-  } while (wirePower().done);
-  const r0 = L.path[0][1], r1 = L.path[L.path.length - 1][1];
-  let cells = '';
-  for (let y = 0; y < L.h; y++) for (let x = -1; x <= L.w; x++) {
-    if (x === -1) cells += `<div class="end">${y === r0 ? '<svg viewBox="0 0 100 100" shape-rendering="crispEdges" role="img" aria-label="Battery"><rect x="6" y="23" width="64" height="54" fill="#0369A1" stroke="#1E1B4B" stroke-width="5"/><rect x="72" y="39" width="8" height="22" fill="#1E1B4B"/><path d="M80 50h20" stroke="#F59E0B" stroke-width="20"/><path d="M26 50h24M38 38v24" stroke="#fff" stroke-width="8"/></svg>' : ''}</div>`;
-    else if (x === L.w) cells += `<div class="end">${y === r1 ? '<svg viewBox="0 0 100 100" role="img" aria-label="Motor"><path d="M0 50h40" stroke="#94A3B8" stroke-width="20" id="mwire"/><g class="prop" id="prop"><rect x="46" y="0" width="20" height="100" fill="#0369A1" stroke="#1E1B4B" stroke-width="4"/></g><rect x="41" y="35" width="30" height="30" fill="#1E1B4B"/></svg>' : ''}</div>`;
-    else { const t = g.t[y][x]; cells += `<button class="tile" data-a="wireTurn" data-x="${x}" data-y="${y}" aria-label="Wire piece, row ${y + 1}, column ${x + 1}. Tap to turn"><svg viewBox="0 0 100 100" style="transform:rotate(${t.r * 90}deg)"><path d="${t.base === 5 ? 'M50 0V100' : 'M50 0V50H100'}"/></svg></button>`; }
-  }
-  stage().innerHTML = `<div class="brief">The electric plane will not start. Tap the wire pieces to turn them until electricity can flow from the <b>battery</b> to the <b>motor</b>.</div>
-<div class="wgrid" style="grid-template-columns:repeat(${L.w + 2},1fr);max-width:${(L.w + 2) * 92}px">${cells}</div><p class="msg" id="msg" role="status"></p>`;
-  wirePaint();
-}
-function wirePower() {
-  const g = S.g, L = g.L, cur = (x, y) => turn(g.t[y][x].base, g.t[y][x].r), on = new Set();
-  const s = L.path[0], e = L.path[L.path.length - 1];
-  if (cur(s[0], s[1]) & 8) { const q = [s]; on.add(s[0] + ',' + s[1]);
-    while (q.length) { const [x, y] = q.pop(); for (const [dx, dy, a, b] of DIRS) { const nx = x + dx, ny = y + dy; if (nx < 0 || ny < 0 || nx >= L.w || ny >= L.h || on.has(nx + ',' + ny)) continue; if ((cur(x, y) & a) && (cur(nx, ny) & b)) { on.add(nx + ',' + ny); q.push([nx, ny]); } } } }
-  return {on, done:on.has(e[0] + ',' + e[1]) && !!(cur(e[0], e[1]) & 2)};
-}
-function wirePaint() { const p = wirePower(); $$('.tile').forEach(b => b.classList.toggle('on', p.on.has(b.dataset.x + ',' + b.dataset.y))); return p; }
-ACT.wireTurn = (d, el) => {
-  const g = S.g; if (g.won) return;
-  const t = g.t[+d.y][+d.x]; t.r++; $('svg', el).style.transform = `rotate(${t.r * 90}deg)`;
-  if (wirePaint().done) { g.won = true; $('#prop').classList.add('spin'); $('#mwire').setAttribute('stroke', '#F59E0B'); say('Power on! The propeller is spinning.', 'good'); pzEnd(true); }
-};
-
-/* ---------- puzzles: build the engine, spot the crack ---------- */
-const PARTS = [
-  {id:'fan', n:'Fan', d:'Sucks in a huge amount of air'},
-  {id:'comp', n:'Compressor', d:'Squeezes the air really tight'},
-  {id:'comb', n:'Combustor', d:'Burns fuel in the squeezed air'},
-  {id:'turb', n:'Turbine', d:'Hot gas spins it, and it drives the fan'},
-  {id:'noz', n:'Exhaust', d:'Gas rushes out of the back'},
-];
-const ZONES = ['20,10 60,14 60,106 20,110', '66,20 130,38 130,82 66,100', '136,34 180,34 180,86 136,86', '186,36 236,22 236,98 186,84', '242,22 284,38 284,82 242,98'];
-const ZX = [40, 98, 158, 211, 263];
-function orderStart() { let o; do { o = shuffle(PARTS.map(p => p.id)); } while (o.every((id, i) => id === PARTS[i].id)); S.g = {placed:0, miss:0, order:o}; orderDraw(); }
-function orderDraw() {
-  const g = S.g;
-  stage().innerHTML = `<div class="brief">Air goes through a jet engine from front to back. Tap the parts in the order the air meets them. Clue: <b>suck, squeeze, bang, blow</b>.</div>
-<svg class="engine" viewBox="0 0 304 120" role="img" aria-label="Engine with ${g.placed} of 5 parts fitted">${ZONES.map((z, i) => `<polygon class="z ${i < g.placed ? 'in' : ''}" points="${z}"/><text x="${ZX[i]}" y="60">${i < g.placed ? i + 1 : '?'}</text>`).join('')}</svg>
-<div class="opts">${g.order.map(id => { const p = PARTS.find(x => x.id === id), done = PARTS.findIndex(x => x.id === id) < g.placed; return `<button class="opt ${done ? 'done' : ''}" data-a="orderPlace" data-id="${id}" ${done ? 'disabled' : ''}><b>${p.n}</b><small>${p.d}</small></button>`; }).join('')}</div>
-<p class="msg" id="msg" role="status"></p>`;
-}
-ACT.orderPlace = (d, el) => {
-  const g = S.g;
-  if (d.id !== PARTS[g.placed].id) { g.miss++; el.classList.remove('shake'); void el.offsetWidth; el.classList.add('shake'); return say('Not that one yet. What does the air meet next?', 'bad'); }
-  g.placed++; orderDraw();
-  if (g.placed === 5) { say(g.miss <= 1 ? 'Engine built! Suck, squeeze, bang, blow.' : 'Engine built! It took a few tries, and that is how engineers learn.', 'good'); pzEnd(g.miss <= 1); }
-};
-function crackStart() { S.g = {bad:rnd(12), picked:-1}; crackDraw(); }
-function crackDraw() {
-  const g = S.g, over = g.picked >= 0;
-  const blade = i => `<svg viewBox="0 0 90 100" aria-hidden="true"><path d="M30 96L24 50 50 4 66 50 64 96Z" fill="#94A3B8" stroke="#1E1B4B" stroke-width="3"/><path d="M36 88L32 52 48 20" fill="none" stroke="#E2E8F0" stroke-width="4"/>${i === g.bad ? '<path d="M50 40l7 5-6 5 5 5" fill="none" stroke="#1E1B4B" stroke-width="2.6"/>' : ''}</svg>`;
-  stage().innerHTML = `<div class="brief">Every blade is checked before it goes into an engine. One of these 12 has a <b>crack</b>. Look closely and tap it.</div>
-<div class="blades">${Array.from({length:12}, (_, i) => `<button data-a="crackPick" data-i="${i}" class="${over && i === g.bad ? 'right' : over && i === g.picked ? 'wrong' : ''}" ${over ? 'disabled' : ''} aria-label="Blade ${i + 1}">${blade(i)}</button>`).join('')}</div>
-<p class="msg ${over ? (g.picked === g.bad ? 'good' : 'bad') : ''}" id="msg" role="status">${over ? (g.picked === g.bad ? 'Well spotted! That blade goes back to be fixed.' : 'That one was fine. The cracked blade is shown in green.') : ''}</p>`;
-}
-ACT.crackPick = d => { const g = S.g; if (g.picked >= 0) return; g.picked = +d.i; crackDraw(); pzEnd(g.picked === g.bad); };
-
-/* ---------- puzzle: power the town ---------- */
-const SRC = [
-  {id:'wind', n:'Wind farm', p:2, c:2, co:0, on:false, d:'Clean, but only works when it is windy'},
-  {id:'solar', n:'Solar park', p:1, c:1, co:0, on:false, d:'Clean, but only works in daylight'},
-  {id:'smr', n:'Small nuclear reactor', p:5, c:6, co:0, on:true, d:'Low-carbon and always on, but costs a lot to build'},
-  {id:'gas', n:'Gas power station', p:3, c:2, co:3, on:true, d:'Always on, but makes carbon dioxide'},
-  {id:'coal', n:'Coal power station', p:4, c:2, co:6, on:true, d:'Cheap and always on, but makes the most carbon dioxide'},
-];
-const TOWN = {power:10, coins:12, steady:4};
-function ecoStart() { S.g = {n:{wind:0, solar:0, smr:0, gas:0, coal:0}, on:false}; ecoDraw(); }
-function ecoTotals() { const t = {p:0, c:0, co:0, st:0}; for (const s of SRC) { const k = S.g.n[s.id]; t.p += k * s.p; t.c += k * s.c; t.co += k * s.co; if (s.on) t.st += k * s.p; } t.ok = t.p >= TOWN.power && t.c <= TOWN.coins && t.st >= TOWN.steady; return t; }
-function ecoDraw() {
-  const g = S.g, t = ecoTotals();
-  stage().innerHTML = `<div class="brief">A town needs electricity. Choose what to build so there is <b>enough power</b>, some of it <b>always on</b> (even on a calm night), without running out of <b>coins</b>. To earn the star, make <b>no carbon dioxide</b>.</div>
-<div class="stagecols"><div class="card eco">${meter('Power', t.p, 16, TOWN.power, 'min')}${meter('Always-on power', t.st, 16, TOWN.steady, 'min')}${meter('Coins spent', t.c, 16, TOWN.coins, 'max')}
-<div class="meter ${t.co === 0 ? 'ok' : 'no'}"><div class="mrow"><span>Carbon dioxide</span><span>${t.co} <span class="tag">${t.co === 0 ? 'None' : 'Polluting'}</span></span></div><div class="mbar"><i style="width:${Math.min(100, t.co / 16 * 100)}%"></i></div></div>
-<p class="msg ${g.on ? 'good' : ''}" id="msg" role="status">${g.on ? (t.co === 0 ? 'Net zero! The whole town is running on clean power.' : 'The lights are on, but the air is dirty. Can you swap in cleaner power?') : ''}</p>
-<div class="row">${g.on ? '<button class="btn sec" data-a="ecoAgain">Change my plan</button>' : `<button class="btn role" data-a="ecoOn" ${t.ok ? '' : 'disabled'}>${icon('bolt')} Switch on</button>`}</div></div>
-<div class="srcs">${SRC.map(s => `<div class="src"><div><b>${s.n}</b><small>${s.d}</small><span class="nums">Power ${s.p} · Coins ${s.c} · CO₂ ${s.co}</span></div>
-<div class="step"><button data-a="ecoStep" data-id="${s.id}" data-v="-1" data-f="m${s.id}" ${g.n[s.id] === 0 || g.on ? 'disabled' : ''} aria-label="One fewer ${s.n}">−</button><output aria-label="${s.n} count">${g.n[s.id]}</output><button data-a="ecoStep" data-id="${s.id}" data-v="1" data-f="p${s.id}" ${g.n[s.id] >= 5 || g.on ? 'disabled' : ''} aria-label="One more ${s.n}">+</button></div></div>`).join('')}</div></div>`;
-}
-ACT.ecoStep = d => { const g = S.g, f = document.activeElement && document.activeElement.getAttribute('data-f'); g.n[d.id] = Math.max(0, Math.min(5, g.n[d.id] + +d.v)); ecoDraw(); const el = f && $(`[data-f="${f}"]`); if (el && !el.disabled) el.focus({preventScroll:true}); };
-ACT.ecoOn = () => { const t = ecoTotals(); if (!t.ok) return; S.g.on = true; ecoDraw(); pzEnd(t.co === 0); };
-ACT.ecoAgain = () => { S.g.on = false; ecoDraw(); $('#pzend').innerHTML = ''; $('#pzskip').hidden = false; };
-
-/* ---------- puzzle: design the fan ---------- */
-const FAN = {
-  size:[{n:'Small', d:'Light, moves less air', t:4, w:2, r:30}, {n:'Medium', d:'In between', t:6, w:3, r:42}, {n:'Large', d:'Moves the most air, but heavy', t:8, w:5, r:56}],
-  mat:[{n:'Steel', d:'Strong but heavy', w:3, c:'#64748B'}, {n:'Titanium', d:'Strong and lighter', w:2, c:'#94A3B8'}, {n:'Carbon fibre', d:'Strong and very light', w:1, c:'#1E293B'}],
-  shape:[{n:'Straight', d:'Simple to make', t:0, z:3}, {n:'Curved', d:'Slices the air more smoothly', t:1, z:1}],
-};
-const FAN_Q = [['size','Fan size'], ['mat','Blade material'], ['shape','Blade shape']];
-function fanStart() { S.g = {size:1, mat:0, shape:0, tests:0, res:null, won:false}; fanDraw(); }
-function fanDraw() {
-  const g = S.g, sz = FAN.size[g.size], mt = FAN.mat[g.mat], R = sz.r, r = g.res;
-  const blade = g.shape ? `M-4 -9L-${R * .3} -${R * .6} ${R * .16} -${R}L7 -${R * .45} 4 -9Z` : `M-3.5 -9L-6 -${R}L6 -${R}L3.5 -9Z`;
-  stage().innerHTML = `<div class="brief">An airline wants a new engine fan with <b>lots of thrust</b> (push). It must <b>not be too heavy</b> and it must be <b>quiet</b> for people who live near airports. Choose a design, then test it. Pass in 3 tests or fewer to earn the star.</div>
-<div class="stagecols"><div><div class="fanbox"><svg viewBox="-64 -64 128 128" role="img" aria-label="${sz.n} fan, ${mt.n}, ${FAN.shape[g.shape].n.toLowerCase()} blades"><rect x="${-R - 6}" y="${-R - 6}" width="${R * 2 + 12}" height="${R * 2 + 12}" fill="none" stroke="#1E1B4B" stroke-width="4"/><g class="fan ${r ? 'spin' : ''}">${Array.from({length:12}, (_, i) => `<path d="${blade}" fill="${mt.c}" transform="rotate(${i * 30})"/>`).join('')}</g><rect x="-8" y="-8" width="16" height="16" fill="#4338CA" stroke="#1E1B4B" stroke-width="3"/></svg></div>
-${r ? `<div class="card" id="fanres">${meter('Thrust', r.t, 10, 8, 'min')}${meter('Weight', r.w, 10, 6, 'max')}${meter('Noise', r.z, 4, 2, 'max')}<p class="msg ${g.won ? 'good' : 'bad'}" id="msg" role="status">${r.msg}</p></div>` : ''}</div>
-<div>${FAN_Q.map(([k, label]) => `<h3 id="f${k}">${label}</h3><div class="seg" role="group" aria-labelledby="f${k}" style="grid-template-columns:repeat(${FAN[k].length},1fr)">${FAN[k].map((o, i) => `<button class="opt" data-a="fanSet" data-k="${k}" data-v="${i}" data-f="${k}${i}" aria-pressed="${g[k] === i}" ${g.won ? 'disabled' : ''}><b>${o.n}</b><small>${o.d}</small></button>`).join('')}</div>`).join('')}
-<div class="row">${g.won ? '' : `<button class="btn role" data-a="fanTest">${icon('play')} Test design${g.tests ? ' (test ' + (g.tests + 1) + ')' : ''}</button>`}</div></div></div>`;
-}
-ACT.fanSet = d => { const g = S.g; if (g.won) return; const f = d.k + d.v; g[d.k] = +d.v; g.res = null; fanDraw(); const el = $(`[data-f="${f}"]`); if (el) el.focus({preventScroll:true}); };
-ACT.fanTest = () => {
-  const g = S.g, sz = FAN.size[g.size], sh = FAN.shape[g.shape];
-  const r = {t:sz.t + sh.t, w:sz.w + FAN.mat[g.mat].w, z:sh.z}; g.tests++;
-  const bad = [];
-  if (r.t < 8) bad.push('Not enough thrust: a bigger fan moves more air.');
-  if (r.w > 6) bad.push('Too heavy: try a lighter blade material.');
-  if (r.z > 2) bad.push('Too noisy: try a different blade shape.');
-  g.won = !bad.length;
-  r.msg = g.won ? `It passed every test on try ${g.tests}! The newest Rolls-Royce fan blades are made of carbon fibre with a titanium edge.` : bad.join(' ');
-  g.res = r; fanDraw();
-  if (g.won) pzEnd(g.tests <= 3);
-  $(g.won ? '#pzend' : '#fanres').scrollIntoView({block:'center', behavior:matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'});
-};
-
-const PUZ = {
-  design:[{t:'Slip through the air', go:() => quizStart(QUIZ.shape)}, {t:'Design the fan', go:fanStart}],
-  software:[{t:'Code the bot', go:() => botStart(0)}, {t:'Code the bot: harder', go:() => botStart(1)}],
-  materials:[{t:'Pick the fan blade material', go:() => quizStart(QUIZ.mat0)}, {t:'Pick the turbine blade material', go:() => quizStart(QUIZ.mat1)}],
-  manufacturing:[{t:'Build the engine', go:orderStart}, {t:'Spot the crack', go:crackStart}],
-  electrical:[{t:'Fix the circuit', go:() => wireStart(0)}, {t:'Fix the bigger circuit', go:() => wireStart(1)}],
-  sustainability:[{t:'Cleaner fuel', go:() => quizStart(QUIZ.fuel)}, {t:'Power the town', go:ecoStart}],
-};
-
-render();
-</script>
+<script src="js/data.js"></script>
+<script src="js/art.js"></script>
+<script src="js/app.js"></script>
+<script src="js/games/design.js"></script>
+<script src="js/games/software.js"></script>
+<script src="js/games/materials.js"></script>
+<script src="js/games/manufacturing.js"></script>
+<script src="js/games/electrical.js"></script>
+<script src="js/games/sustainability.js"></script>
+<script>boot();</script>
 </body>
 </html>
