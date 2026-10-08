@@ -15,7 +15,7 @@ function tallyRead() { try { return Object.assign(tallyBlank(), JSON.parse(local
 function tally(fn) { try { const t = tallyRead(); fn(t); localStorage.setItem(TALLY_KEY, JSON.stringify(t)); } catch (e) {} }
 
 /* ---------- state ---------- */
-const fresh = () => ({screen:'start', av:{skin:2, hair:'short', col:1, glasses:false, outfit:'overalls', gear:'none'}, name:'', know:null, know2:null, picks:[], ranked:[], role:null, explore:false, done:{}, last:0, line:'', run:null, easy:false});
+const fresh = () => ({screen:'start', av:{skin:2, hair:'short', col:1, glasses:false, outfit:'overalls', gear:'none'}, name:'', know:null, know2:null, picks:[], ranked:[], role:null, explore:false, done:{}, last:0, line:'', run:null, easy:false, site:null});
 let S = fresh();
 const who = () => S.name.trim() ? esc(S.name.trim()) : 'You';
 const role = () => ROLES[S.role];
@@ -31,9 +31,9 @@ function render(keep) {
   if (AFTER[S.screen]) AFTER[S.screen]();
   if (fk) { const el = $(`[data-f="${fk}"]`); if (el) el.focus({preventScroll:true}); }
 }
-const BACK = {know:'start', look:'know', skills:'look', role:() => S.explore ? 'explore' : 'skills', game:'role', result:'role', explore:() => S.ranked.length ? 'result' : 'start', stats:'start'};
+const BACK = {know:'start', look:'know', skills:'look', role:() => S.explore ? (S.site ? 'site' : 'explore') : 'skills', site:() => S.ranked.length ? 'role' : 'explore', game:() => S.site ? 'site' : 'role', result:() => S.site ? 'site' : 'role', explore:() => S.site ? 'site' : 'start', stats:'start'};
 function topbar() {
-  const step = {know:1, look:1, skills:2, role:3, game:4, result:4, explore:4, stats:4}[S.screen];
+  const step = {know:1, look:1, skills:2, role:3, site:4, game:4, result:4, explore:4, stats:4}[S.screen];
   return `<header class="top"><button class="back" data-a="back" aria-label="Go back">${icon('back')}</button>
 <ol class="steps" aria-label="Step ${step} of 4">${[1,2,3,4].map(i => `<li class="${i <= step ? 'on' : ''}"></li>`).join('')}</ol><span class="brand">${GAME_NAME}</span></header>`;
 }
@@ -90,20 +90,25 @@ ${mine && why.length ? `<h3>Why it fits you</h3><ul class="chips">${why.map(p =>
 <div class="card green"><h3>${icon('leaf')} Helping the planet</h3><p>${r.planet}</p></div>
 </div>
 <div class="how"><h3>Your job today: ${def.title}</h3><ol>${def.how.map(h => `<li>${h}</li>`).join('')}</ol>
-<button class="btn big" data-a="play">${icon('play')} Start the job</button></div>
+<button class="btn big" data-a="${mine ? 'walk' : 'play'}">${icon('play')} ${mine ? 'Walk to work' : 'Start the job'}</button></div>
 ${also ? `<p>You would also suit: <b>${ROLES[also].n}</b>.</p>` : ''}</section>`;
 };
 
-SCREENS.game = () => {
-  const def = GAMES[S.role], arrows = [...def.pads].filter(k => 'lrud'.includes(k)), rot = {l:270, r:90, u:0, d:180}, name = {l:'left', r:'right', u:'up', d:'down'};
-  return `<div class="gamegrid"><div class="chhead"><h2>${def.title}</h2><span id="chstars">${stars(0)}</span></div>
+const gameScreen = (def, links) => {
+  const arrows = [...def.pads].filter(k => 'lrud'.includes(k)), rot = {l:270, r:90, u:0, d:180}, name = {l:'left', r:'right', u:'up', d:'down'};
+  return `<div class="gamegrid"><div class="chhead"><h2>${def.title}</h2><span id="chstars">${def === GAMES.site ? '' : stars(0)}</span></div>
 <div class="hud"><p class="hint" id="ghint" role="status"></p><p class="hint" id="gscore"></p></div>
 <p class="turn">Turn your phone upright for a bigger game.</p>
 <div class="gwrap"><canvas id="gc" width="360" height="480" tabindex="0" aria-label="${def.title}. ${def.how.join(' ')}"></canvas></div>
 ${def.pads ? `<div class="pads"><div>${arrows.map(k => `<button data-pad="${k}" aria-label="${name[k]}">${icon('arrow', rot[k])}</button>`).join('')}</div>${def.pads.includes('a') ? `<button class="act" data-pad="a">${def.action || 'GO'}</button>` : ''}</div>` : ''}
-<div class="row center glinks"><button class="link" data-a="easy">${S.easy ? 'Normal speed' : 'Too fast? Slow it down'}</button><button class="link" data-a="skip">Skip this job</button></div></div>`;
+<div class="row center glinks">${links}</div></div>`;
 };
-AFTER.game = () => hostStart();
+SCREENS.game = () => gameScreen(GAMES[S.role], `<button class="link" data-a="easy">${S.easy ? 'Normal speed' : 'Too fast? Slow it down'}</button><button class="link" data-a="skip">Skip this job</button>`);
+AFTER.game = () => hostStart(GAMES[S.role]);
+SCREENS.site = () => gameScreen(GAMES.site, `<button class="link" data-a="go" data-to="explore">Map of all six jobs</button><button class="link" data-a="reset">New player</button>`);
+AFTER.site = () => hostStart(GAMES.site);
+// through a door on the site: your own job starts at once, any other shows its card first
+function siteEnter(id) { S.site.at = id; S.role = id; if (id === S.ranked[0]) return go('game'); S.explore = true; go('role'); }
 
 SCREENS.result = () => {
   const r = role(), n = S.last, v = VERDICT[n].map(t => t.replace('{r}', r.n.toLowerCase())), ask = S.know !== null && S.know2 === null;
@@ -115,7 +120,7 @@ ${ask ? `<div class="ask" id="ask">Now how much do you know about what engineers
 <p><b>Try this now:</b> ${r.try}</p>
 <p><b>Subjects that help:</b> ${r.subjects}.</p>
 <p><b>When you are older:</b> Rolls-Royce runs work experience weeks. After your GCSEs you could start an apprenticeship there. You are paid while you learn, over £18,000 in the first year. University is another way in. Both can lead to this job.</p></div>
-<div class="row center"><button class="btn" data-a="go" data-to="explore">Try another engineer</button><button class="btn sec" data-a="play">Play again</button></div>
+<div class="row center"><button class="btn" data-a="site">Back to the site</button><button class="btn sec" data-a="play">Play again</button></div>
 <button class="link" data-a="reset">New player</button></section>`;
 };
 
@@ -153,6 +158,8 @@ const ACT = {
   match: () => { if (S.picks.length !== 3) return; S.ranked = match(S.picks); S.role = S.ranked[0]; S.explore = false; go('role'); },
   quick: () => { S = fresh(); S.av = randomLook(); go('explore'); },
   play: () => go('game'),
+  walk: () => { S.site = S.site || {got:{}, at:null}; S.site.at = null; go('site'); },
+  site: () => { S.site = S.site || {got:{}, at:S.role}; S.site.at = S.role; go('site'); },
   easy: () => { S.easy = !S.easy; go('game'); },
   skip: () => { S.last = 0; S.line = ''; go('result'); },
   open: d => { S.role = d.id; S.explore = true; go('role'); },
@@ -175,10 +182,10 @@ app.addEventListener('click', e => { const b = e.target.closest('[data-a]'); if 
    The host owns the canvas (360 x 480, portrait), the loop (fixed 1/60 s steps), input and the result screen. */
 const GAMES = {};
 const KEYMAP = {ArrowLeft:'l', a:'l', A:'l', ArrowRight:'r', d:'r', D:'r', ArrowUp:'u', w:'u', W:'u', ArrowDown:'d', s:'d', S:'d', ' ':'a', Enter:'a'};
-function hostStart() {
-  const def = GAMES[S.role], cv = $('#gc'), c = cv.getContext('2d'); c.imageSmoothingEnabled = false;
+function hostStart(def) {
+  const cv = $('#gc'), c = cv.getContext('2d'); c.imageSmoothingEnabled = false;
   const g = {
-    W:360, H:480, c, av:S.av, accent:role().c, role:S.role, name:who(), easy:S.easy, t:0, over:false, stars:0,
+    W:360, H:480, c, av:S.av, accent:role() ? role().c : '#F5E12B', role:S.role, name:who(), easy:S.easy, t:0, over:false, stars:0,
     key:{l:0, r:0, u:0, d:0, a:0},       // held right now
     press:{l:0, r:0, u:0, d:0, a:0},     // went down since the last step (true for one step)
     ptr:{x:0, y:0, down:false},          // finger or mouse on the canvas, in canvas units

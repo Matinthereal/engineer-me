@@ -44,8 +44,22 @@ const check = (ok, what) => { if (!ok) fails.push(what); console.log((ok ? 'ok  
     await tap('[data-a="match"]');
     check(await page.evaluate(() => S.role) === 'design', `${dev} draw+maths+talk -> aerospace`);
     await page.waitForTimeout(350); await fit('role');
-    await tap('[data-a="play"]');
-    await page.waitForFunction(() => S.run && S.run.game, null, {timeout:5000});
+    // the walk to work: real keys and buttons move the character, then the robot walks to your own door
+    await tap('[data-a="walk"]');
+    await page.waitForFunction(() => S.screen === 'site' && S.run && S.run.game, null, {timeout:5000});
+    await fit('site');
+    const sx0 = await page.evaluate(() => S.run.game.s.x);
+    await page.keyboard.down('ArrowRight'); await page.waitForTimeout(350); await page.keyboard.up('ArrowRight');
+    const sx1 = await page.evaluate(() => S.run.game.s.x);
+    check(sx1 > sx0 + 20, `${dev} site: right arrow key walks (${Math.round(sx0)} -> ${Math.round(sx1)})`);
+    await page.dispatchEvent('[data-pad="a"]', 'pointerdown', {pointerId:3}); await page.waitForTimeout(140); const sy = await page.evaluate(() => S.run.game.s.y); await page.dispatchEvent('[data-pad="a"]', 'pointerup', {pointerId:3});
+    check(sy < 365, `${dev} site: the JUMP button jumps (y ${Math.round(sy)})`); await page.waitForTimeout(700);
+    const far = await page.evaluate(() => { const gm = S.run.game; gm.s.goal = gm.B[5].id; let k = 0, falls = 0; while (S.screen === 'site' && k < 8000) { const f = gm.s.flash; S.run.def.auto(S.run.g, gm); hostStep(1 / 60); if (gm.s.flash > f) falls++; k++; } return {screen:S.screen, role:S.role, last:gm.B[5].id, falls, secs:Math.round(k / 60)}; });
+    check(far.screen === 'role' && far.role === far.last && far.falls === 0, `${dev} site: the robot crosses the whole site to the last building without falling (${far.secs}s) and its door opens that job's card`);
+    await tap('[data-a="back"]'); await page.waitForFunction(() => S.screen === 'site' && S.run && S.run.game);
+    const own = await page.evaluate(() => { const gm = S.run.game; gm.s.goal = S.ranked[0]; let k = 0; while (S.screen === 'site' && k < 9000) { S.run.def.auto(S.run.g, gm); hostStep(1 / 60); k++; } return {screen:S.screen, role:S.role, bolts:Object.keys(S.site.got).length}; });
+    check(own.screen === 'game' && own.role === 'design', `${dev} site: walking back and through your own door starts your job (${own.bolts} bolts picked up on the way)`);
+    await page.waitForFunction(() => S.run && S.run.game && S.run.def === GAMES.design, null, {timeout:5000});
     await fit('game');
     // real input on the flight game: space starts the flight, a key and an on-screen button steer
     await page.keyboard.press(' '); await page.waitForTimeout(250);
@@ -82,6 +96,8 @@ const check = (ok, what) => { if (!ok) fails.push(what); console.log((ok ? 'ok  
     check(true, `${dev} slow mode restarts the job with easy on`);
     await tap('[data-a="skip"]');
     check(await page.evaluate(() => S.screen === 'result' && S.last === 0), `${dev} skipping a job gives 0 stars`);
+    await tap('[data-a="site"]'); await page.waitForFunction(() => S.screen === 'site' && S.run && S.run.game);
+    check(await page.evaluate(() => S.run.game.s.x > 300), `${dev} back to the site puts you outside the building you just left`);
     await tap('[data-to="explore"]'); await fit('explore');
     await tap('[data-a="open"][data-id="sustainability"]'); await page.waitForTimeout(350); await fit('role-explore');
     await page.evaluate(() => go('stats')); await fit('stats');
